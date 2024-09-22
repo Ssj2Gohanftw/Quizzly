@@ -8,9 +8,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -23,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -71,15 +80,19 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text(text="Sign Up with an account")
-        OutlinedTextField(value =email , onValueChange ={
+        Text(text="Create an account")
+        OutlinedTextField(leadingIcon = {
+            Icon(imageVector = Icons.Default.Email, contentDescription = "Email Account")
+        },value =email , onValueChange ={
             email=it
         }, label = {
             Text(text = "Email address")
         })
         Spacer(modifier = Modifier.height(4.dp))
 
-        OutlinedTextField(value = password, onValueChange ={
+        OutlinedTextField(leadingIcon ={
+            Icon(imageVector = Icons.Filled.Lock, contentDescription = "Password Icon")
+        } , value = password, onValueChange ={
             password=it
         }, label ={
             Text(text = "Password")
@@ -88,13 +101,33 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
 
         Button(onClick = {
             authViewModel.signup(email,password)
-        }) {
-            Text(text = "Sign Up")
+        },colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF))
+            , modifier = Modifier.padding(16.dp)
+        ){
+            Text(text = "Sign Up", color = Color.White)
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text(text ="\tor\n Sign up with")
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment =Alignment.CenterVertically)
+        {
+            HorizontalDivider(
+                modifier= Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                color = Color.Black,
+                thickness = 1.dp)
+
+            Text(text = "or",fontSize=14.sp,color= Color.Black,)
+
+            HorizontalDivider(
+                modifier= Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                color = Color.Black,
+                thickness = 1.dp)
+        }
+        Text(text ="Sign up with")
         Spacer(modifier = Modifier.height(32.dp))
 
         Row {
@@ -102,14 +135,22 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
                 painter = painterResource(id = R.drawable.google)
                 , contentDescription ="Google"
                 , modifier = Modifier
-                    .size(60.dp)
+                  .size(60.dp)
                     .clickable { })
         }
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(onClick ={
-            navController.navigate("login")
+            navController.navigate("login"){
+                popUpTo("signup"){
+                    inclusive=true
+                }
+            }
         }){
-            Text("Already have an account? Sign IN")
+            Text("Already have an account?",color= Color.Black, fontSize = 15.sp)
+            Text(text = "Sign In",
+                color= Color(0xFF007BFF),
+                fontSize = 18.sp
+            )
         }
     }
 }
