@@ -6,8 +6,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.quizapp.pages.ClassesPage
 import com.example.quizapp.pages.HomePage
 import com.example.quizapp.pages.LoginPage
+import com.example.quizapp.pages.SettingsPage
 import com.example.quizapp.pages.SignUpPage
 
 @Composable
@@ -27,5 +29,15 @@ fun Navigation(modifier: Modifier,authViewModel:AuthViewModel){
             composable("signup"){
                 SignUpPage(modifier,navController,authViewModel)
             }
-    } )
+            composable("currentscreen"){
+                CurrentScreen(modifier,navController,authViewModel)
+            }
+             composable("classes") {
+                 ClassesPage(modifier, navController,authViewModel)
+             }
+            composable("settings") {
+                SettingsPage(modifier, navController, authViewModel)
+            }
+    }
+    )
 }

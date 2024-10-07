@@ -56,7 +56,7 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
     val context=LocalContext.current
     LaunchedEffect(authState.value ) {
         when (authState.value) {
-            is AuthState.Authenticated -> navController.navigate("home")
+            is AuthState.Authenticated -> navController.navigate("currentscreen")
             is AuthState.Error -> Toast.makeText(
                 context,
                 (authState.value as AuthState.Error).message,
@@ -146,7 +146,7 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
                 }
             }
         }){
-            Text("Already have an account?",color= Color.Black, fontSize = 15.sp)
+            Text("Already have an account?", fontSize = 15.sp)
             Text(text = "Sign In",
                 color= Color(0xFF007BFF),
                 fontSize = 18.sp

@@ -131,7 +131,7 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
          }
       }
       ){
-         Text("Don't have an account? ",color= Color.Black,fontSize = 15.sp)
+         Text("Don't have an account? ",fontSize = 15.sp)
          Text("Register" ,
             color= Color(0xFF007BFF), fontSize = 18.sp)
    }
