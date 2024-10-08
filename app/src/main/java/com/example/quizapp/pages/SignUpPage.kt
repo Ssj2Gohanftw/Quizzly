@@ -15,10 +15,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -36,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -51,6 +55,9 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
     }
     var password by remember {
         mutableStateOf("")
+    }
+    var passwordVisible by remember {
+        mutableStateOf(false)
     }
     val authState = authViewModel.authState.observeAsState()
     val context=LocalContext.current
@@ -96,7 +103,16 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
             password=it
         }, label ={
             Text(text = "Password")
-        }  , visualTransformation = PasswordVisualTransformation() )
+        }  , visualTransformation = if(!passwordVisible)PasswordVisualTransformation() else VisualTransformation.None,trailingIcon = {
+            val eye= if(passwordVisible){
+                Icons.Filled.Visibility
+            } else {
+                Icons.Filled.VisibilityOff
+            }
+            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                Icon(imageVector = eye, contentDescription = "Toggle Password Visibility")
+            }
+        })
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {

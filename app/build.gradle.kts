@@ -51,9 +51,13 @@ android {
 }
 
 dependencies{
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation (libs.material3)
+    implementation (libs.androidx.material.icons.extended)
     val nav_version = "2.8.1"
-    implementation("androidx.navigation:navigation-compose:$nav_version")
-    implementation ("androidx.compose.material3:material3:<latest_version>")
+    implementation(libs.androidx.navigation.compose)
+    implementation (libs.androidx.material3.vlatestversion)
+    implementation (libs.landscapist.glide)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

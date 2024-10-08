@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.quizapp.pages.ClassesPage
 import com.example.quizapp.pages.HomePage
-import com.example.quizapp.pages.NavItem
+import com.example.quizapp.components.NavItem
 import com.example.quizapp.pages.SettingsPage
 
 @Composable

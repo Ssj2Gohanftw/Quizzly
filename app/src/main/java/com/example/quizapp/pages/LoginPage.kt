@@ -1,6 +1,6 @@
 package com.example.quizapp.pages
 
-import android.graphics.drawable.Icon
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -39,6 +38,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quizapp.AuthViewModel
 import com.example.quizapp.R
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.VisualTransformation
+import com.example.quizapp.AuthState
 
 @Composable
 fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: AuthViewModel){
@@ -48,6 +55,26 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
    var password by remember {
       mutableStateOf("")
    }
+   var passwordVisible by remember {
+      mutableStateOf(false)
+   }
+   val authState = authViewModel.authState.observeAsState()
+   val context= LocalContext.current
+   LaunchedEffect(authState.value ) {
+      when (authState.value) {
+         is AuthState.Authenticated -> navController.navigate("currentscreen")
+         is AuthState.Error -> Toast.makeText(
+            context,
+            (authState.value as AuthState.Error).message,
+            Toast.LENGTH_SHORT
+         ).show()
+
+         else -> {
+            Unit
+         }
+      }
+   }
+
    Column(
       modifier = Modifier.fillMaxSize(),
       verticalArrangement = Arrangement.Center,
@@ -76,10 +103,18 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
          password=it
       }, label ={
          Text(text = "Password")
-      }  , visualTransformation = PasswordVisualTransformation() )
+      }  , visualTransformation = if(!passwordVisible)PasswordVisualTransformation() else VisualTransformation.None,trailingIcon = {
+         val eye= if(passwordVisible){
+            Icons.Filled.Visibility
+         } else {
+            Icons.Filled.VisibilityOff
+         }
+         IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            Icon(imageVector = eye, contentDescription = "Toggle Password Visibility")
+         }} )
       Spacer(modifier = Modifier.height(16.dp))
 
-      Button(onClick = {},
+      Button(onClick = {authViewModel.login(email,password)},
          colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF))
          , modifier = Modifier.padding(16.dp)
       ) {
