@@ -51,11 +51,18 @@ android {
 }
 
 dependencies{
+
+    implementation (libs.firebase.database.ktx)
+    implementation (libs.kotlinx.coroutines.core)
+    implementation(platform(libs.firebase.bom))
+
     implementation(libs.androidx.constraintlayout.compose)
     implementation (libs.material3)
     implementation (libs.androidx.material.icons.extended)
-    val nav_version = "2.8.1"
+
+
     implementation(libs.androidx.navigation.compose)
+    implementation (libs.converter.gson)
     implementation (libs.androidx.material3.vlatestversion)
     implementation (libs.landscapist.glide)
     implementation(libs.androidx.core.ktx)
@@ -68,6 +75,7 @@ dependencies{
     implementation(libs.androidx.material3)
     implementation(libs.firebase.auth)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

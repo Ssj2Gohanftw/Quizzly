@@ -13,7 +13,8 @@ import com.example.quizapp.pages.SettingsPage
 import com.example.quizapp.pages.SignUpPage
 
 @Composable
-fun Navigation(modifier: Modifier,authViewModel:AuthViewModel){
+fun
+        Navigation(modifier: Modifier,authViewModel:AuthViewModel){
     val navController = rememberNavController()
     
     NavHost(
