@@ -6,11 +6,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -54,29 +56,64 @@ bottomBar = {
 )
 {
     innerPadding->
+    val title= when(selectedIndex){
+        0->"Home"
+        1->"Classes"
+        2->"Settings"
+        else->""
+    }
     ContentScreen(
         modifier = Modifier.padding(innerPadding),
         selectedIndex=selectedIndex,
         navController=navController,
+        title = title,
         authViewModel=authViewModel
     )
 
 }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContentScreen(modifier: Modifier = Modifier, selectedIndex:Int,navController: NavController, authViewModel: AuthViewModel) {
+fun ContentScreen(modifier: Modifier = Modifier, selectedIndex:Int,title:String,navController: NavController, authViewModel: AuthViewModel) {
     when (selectedIndex) {
         0 -> {
-            HomePage(modifier,navController, authViewModel)
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text(text = title) }, // Set the title
+                    )
+                },
+                content = { innerPadding ->
+                    HomePage(modifier = modifier.padding(innerPadding), navController, authViewModel)
+                }
+            )
         }
 
         1 -> {
-            ClassesPage(modifier, navController, authViewModel )
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text(text = title) },
+                    )
+                },
+                content = { innerPadding ->
+                    ClassesPage(modifier = modifier.padding(innerPadding), navController, authViewModel )
+
+                }
+            )
         }
 
-        2 -> {
-            SettingsPage(modifier, navController, authViewModel)
+        2 -> {Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = title) }, // Set the title
+                )
+            },
+            content = { innerPadding ->
+                SettingsPage(modifier = modifier.padding(innerPadding), navController, authViewModel)
+            }
+        )
         }
     }
 }

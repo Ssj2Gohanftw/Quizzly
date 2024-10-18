@@ -2,28 +2,34 @@ package com.example.quizapp
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.quizapp.pages.ClassesPage
 import com.example.quizapp.pages.HomePage
+import com.example.quizapp.pages.RoleSelectionPage
 import com.example.quizapp.pages.LoginPage
 import com.example.quizapp.pages.SettingsPage
 import com.example.quizapp.pages.SignUpPage
 
+
 @Composable
-fun
-        Navigation(modifier: Modifier,authViewModel:AuthViewModel){
+fun Navigation(modifier: Modifier,authViewModel:AuthViewModel){
     val navController = rememberNavController()
     
     NavHost(
         navController = navController,
-        startDestination ="login",
+        startDestination ="roleSelection",
         builder = {
-            composable("login"){
-               LoginPage(modifier,navController,authViewModel)
+            composable("roleSelection"){
+                RoleSelectionPage(navController = navController)
             }
+            composable("login"){
+                LoginPage(modifier,navController,authViewModel)
+            }
+//            composable("teacherLogin") {
+//                TeacherLoginPage(modifier,navController,authViewModel)
+//            }
             composable("home"){
                 HomePage(modifier,navController,authViewModel)
             }

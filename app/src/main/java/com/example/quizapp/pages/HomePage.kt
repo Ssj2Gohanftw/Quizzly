@@ -78,14 +78,7 @@ fun HomePage(modifier: Modifier, navController: NavController, authViewModel: Au
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            text = "Quizzes",
-            fontSize = 40.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.White,
-            modifier = Modifier.padding(16.dp)
-        )
+        Spacer(modifier = Modifier.height(100.dp))
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
@@ -122,15 +115,14 @@ fun QuizCard(quiz: QuizInfo, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(10.dp)
-            .fillMaxWidth()
             .clickable { onClick() },
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = Color.DarkGray),
     ) {
         Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             GlideImage(imageModel = quiz.coverimage, modifier = Modifier.size(100.dp), contentDescription = quiz.name)
-            Text(text = quiz.name, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Text(text = "Topic: ${quiz.topic}", fontSize = 16.sp, textAlign = TextAlign.Center)
-            Text(text = "Difficulty: ${quiz.difficultyLevel}", fontSize = 16.sp, textAlign = TextAlign.Center)
+            Text(text = quiz.name, fontSize = 20.sp, fontWeight = FontWeight.Bold,)
+            Text(text = "Topic: ${quiz.topic}", fontSize = 16.sp, textAlign = TextAlign.Center,)
+            Text(text = "Difficulty: ${quiz.difficultyLevel}", fontSize = 16.sp, textAlign = TextAlign.Center,)
         }
     }
 }
@@ -142,7 +134,7 @@ fun QuizDetailDialog(quiz: QuizInfo, onDismiss: () -> Unit) {
         confirmButton = { TextButton(onClick = onDismiss) { Text(text = "Close") } },
         text = {
             Column {
-                GlideImage(imageModel = quiz.coverimage, modifier = Modifier.size(100.dp), contentDescription = quiz.name)
+                GlideImage(imageModel = quiz.coverimage, modifier = Modifier.size(100.dp).align(Alignment.CenterHorizontally), contentDescription = quiz.name)
                 Text(text = quiz.name, fontSize = 24.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "Topic: ${quiz.topic}", fontSize = 18.sp)

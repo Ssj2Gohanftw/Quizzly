@@ -46,6 +46,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.VisualTransformation
 import com.example.quizapp.AuthState
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: AuthViewModel){
@@ -123,8 +124,19 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
       Spacer(modifier = Modifier.height(32.dp))
 
       Text(text = "Forgot Password?", modifier = Modifier.clickable {
+         if (email.isNotEmpty()) {
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+               .addOnCompleteListener { task ->
+                  if (task.isSuccessful) {
+                     Toast.makeText(context, "Password reset email sent", Toast.LENGTH_SHORT).show()
+                  } else {
+                     Toast.makeText(context, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                  }
+               }
+         } else {
+            Toast.makeText(context, "Please enter your email", Toast.LENGTH_SHORT).show()
+         }
       })
-   
 
       Spacer(modifier = Modifier.height(32.dp))
 
@@ -148,7 +160,7 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
       }
       Text(text ="Sign in with")
       Spacer(modifier = Modifier.height(32.dp))
-      
+
       Row {
          Image(
             painter = painterResource(id = R.drawable.google)
