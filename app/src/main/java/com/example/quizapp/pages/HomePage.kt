@@ -103,6 +103,7 @@ fun HomePage(modifier: Modifier, navController: NavController, authViewModel: Au
         // Show details in a dialog if a quiz is selected
         selectedQuiz?.let {
             QuizDetailDialog(
+                navController = navController,
                 quiz = it,
                 onDismiss = { selectedQuiz = null }
             )
@@ -121,14 +122,14 @@ fun QuizCard(quiz: QuizInfo, onClick: () -> Unit) {
         Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             GlideImage(imageModel = quiz.coverimage, modifier = Modifier.size(100.dp), contentDescription = quiz.name)
             Text(text = quiz.name, fontSize = 20.sp, fontWeight = FontWeight.Bold,)
-            Text(text = "Topic: ${quiz.topic}", fontSize = 16.sp, textAlign = TextAlign.Center,)
+            Text(text = quiz.topic, fontSize = 16.sp, textAlign = TextAlign.Center,)
             Text(text = "Difficulty: ${quiz.difficultyLevel}", fontSize = 16.sp, textAlign = TextAlign.Center,)
         }
     }
 }
 
 @Composable
-fun QuizDetailDialog(quiz: QuizInfo, onDismiss: () -> Unit) {
+fun QuizDetailDialog(quiz: QuizInfo,navController: NavController, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = { TextButton(onClick = onDismiss) { Text(text = "Close") } },
@@ -147,7 +148,7 @@ fun QuizDetailDialog(quiz: QuizInfo, onDismiss: () -> Unit) {
                 Button(modifier = Modifier.align(Alignment.CenterHorizontally), colors = ButtonDefaults.buttonColors(containerColor = Color(
                     0xFF4CAF50
                 )
-                ), onClick ={} )
+                ), onClick ={navController.navigate("quiz_screen/{quizId}/{category}/{difficulty}")} )
                 {
                     Text("Play Quiz",color=Color.White)
                 }

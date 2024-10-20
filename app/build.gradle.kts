@@ -51,11 +51,11 @@ android {
 }
 
 dependencies{
-
+    implementation (libs.logging.interceptor)
     implementation (libs.firebase.database.ktx)
     implementation (libs.kotlinx.coroutines.core)
     implementation(platform(libs.firebase.bom))
-
+    implementation(libs.coil.compose)
     implementation(libs.androidx.constraintlayout.compose)
     implementation (libs.material3)
     implementation (libs.androidx.material.icons.extended)

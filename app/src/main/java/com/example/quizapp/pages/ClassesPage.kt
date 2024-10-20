@@ -31,10 +31,7 @@ fun ClassesPage(modifier: Modifier, navController: NavController,authViewModel: 
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text="Classes Page",
-            fontSize=40.sp,
-            fontWeight =FontWeight.SemiBold,
-            color = Color.White
-        )
+
+
     }
 }
