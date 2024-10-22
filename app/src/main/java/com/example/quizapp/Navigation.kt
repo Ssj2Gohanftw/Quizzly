@@ -10,9 +10,12 @@ import com.example.quizapp.pages.ClassesPage
 import com.example.quizapp.pages.HomePage
 import com.example.quizapp.pages.RoleSelectionPage
 import com.example.quizapp.pages.LoginPage
-import com.example.quizapp.pages.QuizScreen
+//import com.example.quizapp.pages.QuizScreen
 import com.example.quizapp.pages.SettingsPage
 import com.example.quizapp.pages.SignUpPage
+import com.example.quizapp.pages.TrHomePage
+import com.example.quizapp.pages.TrLoginPage
+import com.example.quizapp.pages.TrSignUpPage
 
 
 @Composable
@@ -29,9 +32,16 @@ fun Navigation(modifier: Modifier,authViewModel:AuthViewModel){
             composable("login"){
                 LoginPage(modifier,navController,authViewModel)
             }
-//            composable("teacherLogin") {
-//                TeacherLoginPage(modifier,navController,authViewModel)
-//            }
+            composable("trlogin"){
+                TrLoginPage(modifier,navController,authViewModel)
+            }
+            composable("trhome"){
+                TrHomePage(modifier,navController,authViewModel)
+            }
+            composable("trsignup"){
+                TrSignUpPage(modifier,navController,authViewModel)
+            }
+
             composable("home"){
                 HomePage(modifier,navController,authViewModel)
             }
@@ -42,15 +52,18 @@ fun Navigation(modifier: Modifier,authViewModel:AuthViewModel){
                 val quizId = backStackEntry.arguments?.getString("quizId") ?: ""
                 val category = backStackEntry.arguments?.getString("category") ?: ""
                 val difficulty = backStackEntry.arguments?.getString("difficulty") ?: ""
-
-                QuizScreen(
-                    modifier = Modifier,
-                    quizId = quizId.toInt(),
-                    category = category,
-                    difficulty = difficulty
-                )
+//
+//                QuizScreen(
+//                    modifier = Modifier,
+//                    quizId = quizId.toInt(),
+//                    category = category,
+//                    difficulty = difficulty
+//                )
             }
             composable("currentscreen"){
+                CurrentScreen(modifier,navController,authViewModel)
+            }
+            composable("trcurrentscreen"){
                 CurrentScreen(modifier,navController,authViewModel)
             }
              composable("classes") {

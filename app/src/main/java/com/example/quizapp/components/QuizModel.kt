@@ -7,12 +7,11 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.launch
 
 data class QuizQuestion(
-    val id: Int,
-    val question: String,
-    val answers: Map<String, String?>,  // Answers map
-    val correctAnswers: Map<String, Boolean>,  // Map of answer identifiers to Boolean values
-    val category: String,
-    val difficulty: String
+    val questionTitle: String,
+    val options: Map<String, String>,  // Options like {"answer_a": "ls", "answer_b": "cp"}
+    val correctAnswers: Map<String, Boolean>, // Correct answers like {"answer_a_correct": true, "answer_b_correct": false}
+    val points: Int =0,
+    val quizId: String = ""
 )
 
 data class QuizInfo(

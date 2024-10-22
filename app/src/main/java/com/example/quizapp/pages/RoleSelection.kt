@@ -25,7 +25,7 @@ fun RoleSelectionPage(navController:NavController) {
             Text("I'm a Student")
         }
         Spacer(Modifier.height(16.dp))
-        Button(onClick = { navController.navigate("login") }) {
+        Button(onClick = { navController.navigate("trlogin") }) {
             Text("I'm a Teacher")
         }
     }
