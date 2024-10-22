@@ -81,7 +81,7 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
         horizontalAlignment = Alignment.CenterHorizontally
     )
     {
-        Image(painter = painterResource(id = R.drawable.loginicon), contentDescription = "Login Image", modifier = Modifier.size(200.dp))
+        Image(painter = painterResource(id = R.drawable.profile), contentDescription = "Login Image", modifier = Modifier.size(200.dp))
 
         Text(text = "Welcome!", fontSize = 28.sp, fontWeight = FontWeight.Bold)
 
@@ -131,7 +131,7 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
                 modifier= Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                color = Color.Black,
+                color = Color.White,
                 thickness = 1.dp)
 
             Text(text = "or",fontSize=14.sp,color= Color.Black,)
@@ -140,7 +140,7 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
                 modifier= Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                color = Color.Black,
+                color = Color.White,
                 thickness = 1.dp)
         }
         Text(text ="Sign up with")

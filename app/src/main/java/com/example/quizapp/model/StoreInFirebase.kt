@@ -1,4 +1,4 @@
-package com.example.quizapp.components// Function to dynamically add questions to Firebase for a specific subject and quiz
+package com.example.quizapp.model// Function to dynamically add questions to Firebase for a specific subject and quiz
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import org.json.JSONObject

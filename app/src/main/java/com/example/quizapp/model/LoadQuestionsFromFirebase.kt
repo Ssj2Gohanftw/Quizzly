@@ -1,4 +1,4 @@
-package com.example.quizapp.components
+package com.example.quizapp.model
 import com.google.firebase.database.*
 
 fun loadQuizQuestions(quizId: String, onQuestionsLoaded: (List<QuizQuestion>) -> Unit) {

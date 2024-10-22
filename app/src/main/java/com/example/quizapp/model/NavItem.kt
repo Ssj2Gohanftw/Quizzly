@@ -1,4 +1,4 @@
-package com.example.quizapp.components
+package com.example.quizapp.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

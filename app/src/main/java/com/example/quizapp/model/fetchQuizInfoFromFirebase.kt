@@ -1,10 +1,8 @@
-package com.example.quizapp.components
+package com.example.quizapp.model
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-
-import com.google.firebase.database.*
 
 fun fetchQuizInfoFromFirebase(onDataFetched: (List<QuizInfo>) -> Unit) {
     val database = FirebaseDatabase.getInstance().reference

@@ -56,6 +56,13 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
    var password by remember {
       mutableStateOf("")
    }
+   var isLoading by remember {
+      mutableStateOf(false)
+   }
+
+   var resetEmailSent by remember {
+      mutableStateOf(false)
+   }
    var passwordVisible by remember {
       mutableStateOf(false)
    }
@@ -82,7 +89,7 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
       horizontalAlignment = Alignment.CenterHorizontally
    )
    {
-      Image(painter = painterResource(id = R.drawable.loginicon), contentDescription = "Login Image", modifier = Modifier.size(200.dp))
+      Image(painter = painterResource(id = R.drawable.profile), contentDescription = "Login Image", modifier = Modifier.size(200.dp))
 
       Text(text = "Welcome Back", fontSize = 28.sp, fontWeight = FontWeight.Bold)
 
@@ -125,9 +132,12 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
 
       Text(text = "Forgot Password?", modifier = Modifier.clickable {
          if (email.isNotEmpty()) {
+            isLoading = true
             FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                .addOnCompleteListener { task ->
+                  isLoading = false
                   if (task.isSuccessful) {
+                     resetEmailSent = true
                      Toast.makeText(context, "Password reset email sent", Toast.LENGTH_SHORT).show()
                   } else {
                      Toast.makeText(context, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
@@ -137,6 +147,13 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
             Toast.makeText(context, "Please enter your email", Toast.LENGTH_SHORT).show()
          }
       })
+      if (isLoading) {
+         // Show a loading indicator while the email is being sent
+         Text(text = "Sending email...", color = Color.Gray)
+      } else if (resetEmailSent) {
+         // Optionally, you could show a confirmation message here
+         Text(text = "Check your email for password reset instructions.", color = Color.Gray)
+      }
 
       Spacer(modifier = Modifier.height(32.dp))
 
@@ -146,7 +163,7 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
             modifier= Modifier
                .fillMaxWidth()
                .weight(1f),
-            color = Color.Black,
+            color = Color.White,
             thickness = 1.dp)
 
          Text(text = "or",fontSize=14.sp,color= Color.Black,)
@@ -155,7 +172,7 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
             modifier= Modifier
                .fillMaxWidth()
                .weight(1f),
-            color = Color.Black,
+            color = Color.White,
             thickness = 1.dp)
       }
       Text(text ="Sign in with")
