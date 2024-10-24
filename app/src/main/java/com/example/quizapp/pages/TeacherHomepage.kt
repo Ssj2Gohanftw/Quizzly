@@ -128,7 +128,6 @@ fun TrQuizCard(quiz: QuizInfo, onClick: () -> Unit) {
     }
 }
 
-//QuizDetailDialog -> TrQuizDetailDialog
 @Composable
 fun TrQuizDetailDialog(quiz: QuizInfo, onDismiss: () -> Unit) {
     AlertDialog(

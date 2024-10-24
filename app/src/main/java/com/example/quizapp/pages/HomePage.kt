@@ -54,6 +54,8 @@ fun HomePage(modifier: Modifier, navController: NavController, authViewModel: Au
         when (authState.value) {
             is AuthState.UnAuthenticated -> navController.navigate("login")
             else -> Unit
+
+
         }
     }
 

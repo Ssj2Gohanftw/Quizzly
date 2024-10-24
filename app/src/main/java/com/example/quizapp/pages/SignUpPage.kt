@@ -1,5 +1,4 @@
 package com.example.quizapp.pages
-
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,6 +16,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.sharp.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -59,6 +59,9 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
     var passwordVisible by remember {
         mutableStateOf(false)
     }
+    var name by remember {
+        mutableStateOf("")
+    }
     val authState = authViewModel.authState.observeAsState()
     val context=LocalContext.current
     LaunchedEffect(authState.value ) {
@@ -89,6 +92,15 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
 
         Text(text="Create an account")
         OutlinedTextField(leadingIcon = {
+            Icon(imageVector = Icons.Sharp.Person, contentDescription = "Name")
+        },value =name , onValueChange ={
+            name=it
+        }, label = {
+            Text(text = "Name")
+        })
+        Spacer(modifier = Modifier.height(4.dp))
+
+        OutlinedTextField(leadingIcon = {
             Icon(imageVector = Icons.Default.Email, contentDescription = "Email Account")
         },value =email , onValueChange ={
             email=it
@@ -116,7 +128,7 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            authViewModel.signup(email,password)
+            authViewModel.signup(name,email,password)
         },colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF))
             , modifier = Modifier.padding(16.dp)
         ){
@@ -134,7 +146,7 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
                 color = Color.White,
                 thickness = 1.dp)
 
-            Text(text = "or",fontSize=14.sp,color= Color.Black,)
+            Text(text = "or",fontSize=14.sp,color= Color.White,)
 
             HorizontalDivider(
                 modifier= Modifier

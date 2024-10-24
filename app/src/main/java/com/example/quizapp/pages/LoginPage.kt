@@ -148,10 +148,9 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
          }
       })
       if (isLoading) {
-         // Show a loading indicator while the email is being sent
          Text(text = "Sending email...", color = Color.Gray)
       } else if (resetEmailSent) {
-         // Optionally, you could show a confirmation message here
+
          Text(text = "Check your email for password reset instructions.", color = Color.Gray)
       }
 
@@ -166,7 +165,7 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
             color = Color.White,
             thickness = 1.dp)
 
-         Text(text = "or",fontSize=14.sp,color= Color.Black,)
+         Text(text = "or",fontSize=14.sp,color= Color.White,)
 
          HorizontalDivider(
             modifier= Modifier

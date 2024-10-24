@@ -62,7 +62,6 @@ fun QuizDetailDialog(quiz: QuizInfo, navController: NavController, onDismiss: ()
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
                     onClick = {
-                        // Replace this with actual quizId retrieved from Firebase for the selected quiz
                         val quizId = "retrievedQuizId"
                         navController.navigate("quiz_screen/$quizId/${quiz.topic}/${quiz.difficultyLevel}")
                     }

@@ -82,7 +82,7 @@ fun TrLoginPage(modifier: Modifier, navController: NavController, authViewModel:
     {
         Image(painter = painterResource(id = R.drawable.loginicon), contentDescription = "Login Image", modifier = Modifier.size(200.dp))
 
-        Text(text = "Welcome man", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Welcome Back", fontSize = 28.sp, fontWeight = FontWeight.Bold)
 
         Spacer(modifier = Modifier.height(4.dp))
 
@@ -114,7 +114,7 @@ fun TrLoginPage(modifier: Modifier, navController: NavController, authViewModel:
         Spacer(modifier = Modifier.height(16.dp))
 
 
-        Button(onClick = {authViewModel.login(email,password)},
+        Button(onClick = {authViewModel.trlogin(email,password)},
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF))
             , modifier = Modifier.padding(16.dp)
         ) {
@@ -148,7 +148,7 @@ fun TrLoginPage(modifier: Modifier, navController: NavController, authViewModel:
                 color = Color.Black,
                 thickness = 1.dp)
 
-            Text(text = "or",fontSize=14.sp,color= Color.Black,)
+            Text(text = "or",fontSize=14.sp,color= Color.White,)
 
             HorizontalDivider(
                 modifier= Modifier

@@ -42,12 +42,11 @@ fun Navigation(modifier: Modifier, authViewModel: AuthViewModel) {
                 TrHomePage(modifier, navController, authViewModel)
             }
 
-            // Current screen for both roles (if used)
             composable("currentscreen") {
                 CurrentScreen(modifier, navController, authViewModel)
             }
             composable("trcurrentscreen") {
-                CurrentScreen(modifier, navController, authViewModel)
+                TrCurrentScreen(modifier, navController, authViewModel)
             }
 
             // Classes and settings pages
