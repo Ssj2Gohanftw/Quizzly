@@ -1,4 +1,5 @@
 package com.example.quizapp
+
 import android.net.Uri
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -10,58 +11,115 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import android.content.Context
 
-class AuthViewModel:ViewModel(){
-    private val _auth:FirebaseAuth=FirebaseAuth.getInstance()
-    private val _authState=MutableLiveData<AuthState>()
-    val authState: LiveData<AuthState> =_authState
+class AuthViewModel : ViewModel() {
+    private val _auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val _authState = MutableLiveData<AuthState>()
+    val authState: LiveData<AuthState> = _authState
     private val storageRef = FirebaseStorage.getInstance().reference
     private val databaseRef = FirebaseDatabase.getInstance().reference
+
     init {
         checkAuthStatus()
     }
-    fun checkAuthStatus(){
-        if(_auth.currentUser!=null){
-            _authState.value=AuthState.Authenticated
-        }else{
-            _authState.value=AuthState.UnAuthenticated
+
+    fun checkAuthStatus() {
+        if (_auth.currentUser != null) {
+            _authState.value = AuthState.Authenticated
+        } else {
+            _authState.value = AuthState.UnAuthenticated
         }
     }
-    fun login(email:String,password:String){
-        if(email.isEmpty()||password.isEmpty()){
-            _authState.value=AuthState.Error("Email and password can't be empty")
+
+    fun login(email: String, password: String) {
+        if (email.isEmpty() || password.isEmpty()) {
+            _authState.value = AuthState.Error("Email and password can't be empty")
             return
         }
-        _authState.value=AuthState.Loading
-        _auth.signInWithEmailAndPassword(email,password)
-            .addOnCompleteListener{task->
-                if(task.isSuccessful){
-                    _authState.value=AuthState.Authenticated
-                }
-                else{
-                    _authState.value=AuthState.Error(task.exception?.message?:"Something went wrong")
-                }
-         }
-}
-    fun signup(email:String,password:String){
-        if(email.isEmpty()||password.isEmpty()){
-            _authState.value=AuthState.Error("Email and password can't be empty")
-            return
-        }
-        _authState.value=AuthState.Loading
-        _auth.createUserWithEmailAndPassword(email,password)
-            .addOnCompleteListener{task->
-                if(task.isSuccessful){
-                    _authState.value=AuthState.Authenticated
-                }
-                else{
-                    _authState.value=AuthState.Error(task.exception?.message?:"Something went wrong")
+        _authState.value = AuthState.Loading
+        _auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _authState.value = AuthState.Authenticated
+                } else {
+                    _authState.value = AuthState.Error(task.exception?.message ?: "Something went wrong")
                 }
             }
     }
-    fun signout(){
-        _auth.signOut()
-        _authState.value=AuthState.UnAuthenticated
+
+    fun signup(email: String, password: String) {
+        if (email.isEmpty() || password.isEmpty()) {
+            _authState.value = AuthState.Error("Email and password can't be empty")
+            return
         }
+        _authState.value = AuthState.Loading
+        _auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _authState.value = AuthState.Authenticated
+
+                    // Store email and password in Realtime Database under a unique key in Students
+                    val userId = _auth.currentUser?.uid
+                    if (userId != null) {
+                        val studentData = mapOf(
+                            "email" to email,
+                            "password" to password
+                        )
+                        // Generate a unique key under Students for each new signup
+                        val newStudentRef = databaseRef.child("Students").push() // This generates a unique ID
+                        newStudentRef.setValue(studentData)
+                            .addOnCompleteListener { dbTask ->
+                                if (dbTask.isSuccessful) {
+                                    _authState.value = AuthState.Authenticated
+                                } else {
+                                    _authState.value = AuthState.Error(dbTask.exception?.message ?: "Failed to store user data")
+                                }
+                            }
+                    }
+                } else {
+                    _authState.value = AuthState.Error(task.exception?.message ?: "Something went wrong")
+                }
+            }
+    }
+
+    fun trsignup(email: String, password: String) {
+        if (email.isEmpty() || password.isEmpty()) {
+            _authState.value = AuthState.Error("Email and password can't be empty")
+            return
+        }
+        _authState.value = AuthState.Loading
+        _auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _authState.value = AuthState.Authenticated
+
+                    // Store email and password in Realtime Database under a unique key in Students
+                    val userId = _auth.currentUser?.uid
+                    if (userId != null) {
+                        val studentData = mapOf(
+                            "email" to email,
+                            "password" to password
+                        )
+                        // Generate a unique key under Students for each new signup
+                        val newTeacherRef = databaseRef.child("Teachers").push() // This generates a unique ID
+                        newTeacherRef.setValue(studentData)
+                            .addOnCompleteListener { dbTask ->
+                                if (dbTask.isSuccessful) {
+                                    _authState.value = AuthState.Authenticated
+                                } else {
+                                    _authState.value = AuthState.Error(dbTask.exception?.message ?: "Failed to store user data")
+                                }
+                            }
+                    }
+                } else {
+                    _authState.value = AuthState.Error(task.exception?.message ?: "Something went wrong")
+                }
+            }
+    }
+
+    fun signout() {
+        _auth.signOut()
+        _authState.value = AuthState.UnAuthenticated
+    }
 
     fun getCurrentUser() = _auth.currentUser
 
@@ -151,11 +209,11 @@ class AuthViewModel:ViewModel(){
             }
         }
     }
-    }
-sealed class AuthState{
-    object Authenticated:AuthState()
-    object UnAuthenticated:AuthState()
-    object Loading:AuthState()
-    data class Error(val message:String):AuthState()
+}
 
+sealed class AuthState {
+    object Authenticated : AuthState()
+    object UnAuthenticated : AuthState()
+    object Loading : AuthState()
+    data class Error(val message: String) : AuthState()
 }

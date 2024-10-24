@@ -114,7 +114,8 @@ fun TrSignUpPage(modifier: Modifier, navController: NavController, authViewModel
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            authViewModel.signup(email,password)
+            //Change******************************************* signup to trsignup
+            authViewModel.trsignup(email,password)
         },colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF))
             , modifier = Modifier.padding(16.dp)
         ){

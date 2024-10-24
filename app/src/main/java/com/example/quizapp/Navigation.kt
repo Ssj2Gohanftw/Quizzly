@@ -15,6 +15,7 @@ import com.example.quizapp.pages.SettingsPage
 import com.example.quizapp.pages.SignUpPage
 import com.example.quizapp.pages.TrHomePage
 import com.example.quizapp.pages.TrLoginPage
+import com.example.quizapp.pages.TrQuizCreatePage
 import com.example.quizapp.pages.TrSignUpPage
 
 
@@ -64,11 +65,17 @@ fun Navigation(modifier: Modifier,authViewModel:AuthViewModel){
                 CurrentScreen(modifier,navController,authViewModel)
             }
             composable("trcurrentscreen"){
-                CurrentScreen(modifier,navController,authViewModel)
+                TrCurrentScreen(modifier,navController,authViewModel)
             }
              composable("classes") {
                  ClassesPage(modifier, navController,authViewModel)
              }
+
+            //Change: added TrQuizCreatePage
+            composable("createquiz") {
+                TrQuizCreatePage(modifier, navController,authViewModel)
+            }
+
             composable("settings") {
                 SettingsPage(modifier, navController, authViewModel)
             }

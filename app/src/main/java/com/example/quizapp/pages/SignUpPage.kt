@@ -151,7 +151,7 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
                 painter = painterResource(id = R.drawable.google)
                 , contentDescription ="Google"
                 , modifier = Modifier
-                  .size(60.dp)
+                    .size(60.dp)
                     .clickable { })
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -170,4 +170,3 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
         }
     }
 }
-
