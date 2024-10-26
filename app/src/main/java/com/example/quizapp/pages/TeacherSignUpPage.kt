@@ -43,8 +43,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.quizapp.AuthState
-import com.example.quizapp.AuthViewModel
+import com.example.quizapp.model.AuthState
+import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.R
 
 @Composable

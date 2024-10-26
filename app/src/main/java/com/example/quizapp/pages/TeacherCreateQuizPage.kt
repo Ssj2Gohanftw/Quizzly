@@ -1,4 +1,4 @@
-package com.example.quizapp.components
+package com.example.quizapp.pages
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,8 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.quizapp.AuthState
-import com.example.quizapp.AuthViewModel
+import com.example.quizapp.model.AuthState
+import com.example.quizapp.model.AuthViewModel
 import com.google.firebase.database.FirebaseDatabase
 
 @Composable

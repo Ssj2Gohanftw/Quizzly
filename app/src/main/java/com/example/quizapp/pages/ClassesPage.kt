@@ -3,18 +3,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.quizapp.AuthState
-import com.example.quizapp.AuthViewModel
+import com.example.quizapp.model.AuthState
+import com.example.quizapp.model.AuthViewModel
 
 @Composable
 fun ClassesPage(modifier: Modifier, navController: NavController,authViewModel: AuthViewModel) {
@@ -22,7 +19,7 @@ fun ClassesPage(modifier: Modifier, navController: NavController,authViewModel: 
     LaunchedEffect(authState.value) {
         when (authState.value)
         {
-            is AuthState.UnAuthenticated ->navController.navigate("login")
+            is AuthState.UnAuthenticated ->navController.navigate("roleSelection")
             else->Unit
         }
     }

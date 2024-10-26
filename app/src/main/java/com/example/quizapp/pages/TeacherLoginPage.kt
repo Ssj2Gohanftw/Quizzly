@@ -35,7 +35,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.quizapp.AuthViewModel
+import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.R
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -44,7 +44,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.VisualTransformation
-import com.example.quizapp.AuthState
+import com.example.quizapp.model.AuthState
 import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun TrLoginPage(modifier: Modifier, navController: NavController, authViewModel: AuthViewModel){

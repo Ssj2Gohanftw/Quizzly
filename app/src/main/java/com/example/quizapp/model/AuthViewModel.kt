@@ -1,4 +1,4 @@
-package com.example.quizapp
+package com.example.quizapp.model
 import android.net.Uri
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -40,7 +40,8 @@ class AuthViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     _authState.value = AuthState.Authenticated
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message ?: "Something went wrong")
+                    _authState.value =
+                        AuthState.Error(task.exception?.message ?: "Something went wrong")
                 }
             }
     }
@@ -55,15 +56,16 @@ class AuthViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     _authState.value = AuthState.Authenticated
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message ?: "Something went wrong")
+                    _authState.value =
+                        AuthState.Error(task.exception?.message ?: "Something went wrong")
                 }
             }
     }
 
 
-    fun signup(name:String,email: String, password: String) {
+    fun signup(name: String, email: String, password: String) {
         if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
-            _authState.value = AuthState.Error("Name,Email and Password fields can't be empty!")
+            _authState.value = AuthState.Error("Name, Email, and Password fields can't be empty!")
             return
         }
         _authState.value = AuthState.Loading
@@ -72,33 +74,35 @@ class AuthViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     _authState.value = AuthState.Authenticated
 
-                    // Store email and password in Realtime Database under a unique key in Students
+                    // Use the UID from authentication for storing data in Realtime Database
                     val userId = _auth.currentUser?.uid
                     if (userId != null) {
                         val studentData = mapOf(
                             "name" to name,
                             "email" to email
                         )
-                        // Generate a unique key under Students for each new signup
-                        val newStudentRef = databaseRef.child("Students").push() // This generates a unique ID
-                        newStudentRef.setValue(studentData)
+                        // Store student data using the UID
+                        databaseRef.child("Students").child(userId).setValue(studentData)
                             .addOnCompleteListener { dbTask ->
                                 if (dbTask.isSuccessful) {
                                     _authState.value = AuthState.Authenticated
                                 } else {
-                                    _authState.value = AuthState.Error(dbTask.exception?.message ?: "Failed to store user data")
+                                    _authState.value = AuthState.Error(
+                                        dbTask.exception?.message ?: "Failed to store user data"
+                                    )
                                 }
                             }
                     }
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message ?: "Something went wrong")
+                    _authState.value =
+                        AuthState.Error(task.exception?.message ?: "Something went wrong")
                 }
             }
     }
 
-    fun trsignup(name:String,email: String, password: String) {
+    fun trsignup(name: String, email: String, password: String) {
         if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
-            _authState.value = AuthState.Error("Name,Email and Password fields can't be empty!")
+            _authState.value = AuthState.Error("Name, Email, and Password fields can't be empty!")
             return
         }
         _authState.value = AuthState.Loading
@@ -107,29 +111,32 @@ class AuthViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     _authState.value = AuthState.Authenticated
 
-                    // Store email and password in Realtime Database under a unique key in Students
+                    // Use the UID from authentication for storing data in Realtime Database
                     val userId = _auth.currentUser?.uid
                     if (userId != null) {
                         val teacherData = mapOf(
                             "name" to name,
                             "email" to email
                         )
-                        // Generate a unique key under Students for each new signup
-                        val newTeacherRef = databaseRef.child("Teachers").push() // This generates a unique ID
-                        newTeacherRef.setValue(teacherData)
+                        // Store teacher data using the UID
+                        databaseRef.child("Teachers").child(userId).setValue(teacherData)
                             .addOnCompleteListener { dbTask ->
                                 if (dbTask.isSuccessful) {
                                     _authState.value = AuthState.Authenticated
                                 } else {
-                                    _authState.value = AuthState.Error(dbTask.exception?.message ?: "Failed to store user data")
+                                    _authState.value = AuthState.Error(
+                                        dbTask.exception?.message ?: "Failed to store user data"
+                                    )
                                 }
                             }
                     }
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message ?: "Something went wrong")
+                    _authState.value =
+                        AuthState.Error(task.exception?.message ?: "Something went wrong")
                 }
             }
     }
+
 
     fun signout() {
         _auth.signOut()
@@ -138,23 +145,6 @@ class AuthViewModel : ViewModel() {
 
     fun getCurrentUser() = _auth.currentUser
 
-    // Update Username
-    fun uploadProfilePicture(context: Context, uri: Uri) {
-        val userId = _auth.currentUser?.uid ?: return
-        val profilePicRef = storageRef.child("profile_pictures/$userId.jpg")
-
-        profilePicRef.putFile(uri)
-            .addOnSuccessListener {
-                profilePicRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                    saveProfilePictureAndUsernameToDatabase(downloadUrl.toString(), userId)
-                    updateFirebaseUserProfile(downloadUrl.toString())
-                    Toast.makeText(context, "Profile picture updated", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener { exception ->
-                _authState.value = AuthState.Error("Failed to upload profile picture: ${exception.message}")
-            }
-    }
 
     // Save both the image URL and the username to Firebase Realtime Database
     private fun saveProfilePictureAndUsernameToDatabase(imageUrl: String, userId: String) {
@@ -180,7 +170,8 @@ class AuthViewModel : ViewModel() {
             if (task.isSuccessful) {
                 _authState.value = AuthState.Authenticated
             } else {
-                _authState.value = AuthState.Error(task.exception?.message ?: "Error updating profile")
+                _authState.value =
+                    AuthState.Error(task.exception?.message ?: "Error updating profile")
             }
         }
     }
@@ -198,7 +189,8 @@ class AuthViewModel : ViewModel() {
                 databaseRef.child("Users").child(userId).child("username").setValue(newUsername)
                 _authState.value = AuthState.Authenticated
             } else {
-                _authState.value = AuthState.Error(task.exception?.message ?: "Error updating username")
+                _authState.value =
+                    AuthState.Error(task.exception?.message ?: "Error updating username")
             }
         }
     }
@@ -209,7 +201,8 @@ class AuthViewModel : ViewModel() {
             if (task.isSuccessful) {
                 _authState.value = AuthState.Authenticated
             } else {
-                _authState.value = AuthState.Error(task.exception?.message ?: "Error updating password")
+                _authState.value =
+                    AuthState.Error(task.exception?.message ?: "Error updating password")
             }
         }
     }
@@ -220,9 +213,28 @@ class AuthViewModel : ViewModel() {
             if (task.isSuccessful) {
                 _authState.value = AuthState.UnAuthenticated
             } else {
-                _authState.value = AuthState.Error(task.exception?.message ?: "Error deleting account")
+                _authState.value =
+                    AuthState.Error(task.exception?.message ?: "Error deleting account")
             }
         }
+    }
+    fun uploadProfilePicture(context: Context, uri: Uri) {
+        val userId = _auth.currentUser?.uid ?: return
+        val profilePicRef = storageRef.child("profile_pictures/$userId.jpg")
+
+        profilePicRef.putFile(uri)
+            .addOnSuccessListener {
+                profilePicRef.downloadUrl.addOnSuccessListener { downloadUrl ->
+                    // Save the new profile picture URL to the database
+                    saveProfilePictureAndUsernameToDatabase(downloadUrl.toString(), userId)
+                    updateFirebaseUserProfile(downloadUrl.toString())
+                    Toast.makeText(context, "Profile picture updated", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { exception ->
+                _authState.value =
+                    AuthState.Error("Failed to upload profile picture: ${exception.message}")
+            }
     }
 }
 

@@ -38,8 +38,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.quizapp.AuthState
-import com.example.quizapp.AuthViewModel
+import com.example.quizapp.model.AuthState
+import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.model.QuizInfo
 import com.example.quizapp.model.fetchQuizInfoFromFirebase
 import com.skydoves.landscapist.glide.GlideImage
@@ -49,7 +49,7 @@ fun TrHomePage(modifier: Modifier, navController: NavController, authViewModel: 
     val authState = authViewModel.authState.observeAsState()
     LaunchedEffect(authState.value) {
         when (authState.value) {
-            is AuthState.UnAuthenticated -> navController.navigate("trlogin")
+            is AuthState.UnAuthenticated -> navController.navigate("roleSelection")
             else -> Unit
         }
     }
