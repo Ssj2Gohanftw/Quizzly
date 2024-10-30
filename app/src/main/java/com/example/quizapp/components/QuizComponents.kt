@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quizapp.model.QuizInfo
+import com.example.quizapp.model.QuizQuestion
 import com.skydoves.landscapist.glide.GlideImage
 
 
@@ -42,7 +43,7 @@ fun QuizCard(quiz: QuizInfo, onClick: () -> Unit) {
     }
 }
 @Composable
-fun QuizDetailDialog(quiz: QuizInfo, navController: NavController, onDismiss: () -> Unit) {
+fun QuizDetailDialog(quiz: QuizInfo,navController: NavController, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = { TextButton(onClick = onDismiss) { Text(text = "Close") } },
@@ -62,8 +63,7 @@ fun QuizDetailDialog(quiz: QuizInfo, navController: NavController, onDismiss: ()
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
                     onClick = {
-                        val quizId = "retrievedQuizId"
-                        navController.navigate("quiz_screen/$quizId/${quiz.topic}/${quiz.difficultyLevel}")
+                        navController.navigate("quiz_screen/${quiz.quizId}")
                     }
                 ) {
                     Text("Play Quiz", color = Color.White)

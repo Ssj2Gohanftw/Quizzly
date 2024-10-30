@@ -21,7 +21,7 @@ fun QuizQuestionCard(
 
         // Display the question title
         Text(
-            text = question.questionTitle,
+            text = question.question_title,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(8.dp)

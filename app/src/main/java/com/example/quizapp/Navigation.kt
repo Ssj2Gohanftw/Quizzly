@@ -57,20 +57,17 @@ fun Navigation(modifier: Modifier, authViewModel: AuthViewModel) {
             composable("settings") {
                 SettingsPage(modifier, navController, authViewModel)
             }
-
+            composable("leaderboards") {
+                SettingsPage(modifier, navController, authViewModel)
+            }
             // Quiz screen with parameters for quiz details
-            composable("quiz_screen/{quizId}/{category}/{difficulty}") { backStackEntry ->
+            composable("quiz_screen/{quizId}") { backStackEntry ->
                 val quizId = backStackEntry.arguments?.getString("quizId") ?: ""
-                val category = backStackEntry.arguments?.getString("category") ?: ""
-                val difficulty = backStackEntry.arguments?.getString("difficulty") ?: ""
 
-                // Ensure this function is used to display the quiz screen
                 QuizScreen(
                     modifier = modifier,
                     navController = navController,
-                    quizId = quizId,
-                    category = category,
-                    difficulty = difficulty
+                    quizId = quizId
                 )
             }
         }

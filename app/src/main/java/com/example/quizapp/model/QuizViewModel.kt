@@ -1,5 +1,6 @@
 package com.example.quizapp.model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +18,8 @@ class QuizViewModel : ViewModel() {
     fun getQuizQuestions(quizId: String) {
         viewModelScope.launch {
             try {
-                databaseReference.orderByChild("quizId").equalTo(quizId)
+                // Accessing the questions directly under the specified quizId node
+                databaseReference.child(quizId)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             val questionList = mutableListOf<QuizQuestion>()
@@ -26,13 +28,16 @@ class QuizViewModel : ViewModel() {
                                 quizQuestion?.let { questionList.add(it) }
                             }
                             _quizQuestions.value = questionList
+                            Log.d("QuizViewModel", "Loaded questions: $questionList") // Log loaded questions
                         }
 
                         override fun onCancelled(error: DatabaseError) {
+                            Log.e("QuizViewModel", "Database error: ${error.message}")
                             _quizQuestions.value = emptyList() // In case of error
                         }
                     })
             } catch (e: Exception) {
+                Log.e("QuizViewModel", "Error fetching questions: ${e.message}")
                 _quizQuestions.value = emptyList() // In case of error
             }
         }

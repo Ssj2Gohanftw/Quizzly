@@ -1,14 +1,15 @@
 package com.example.quizapp.model
 
 data class QuizQuestion(
-    val questionTitle: String,
-    val options: Map<String, String>,  // Options like {"answer_a": "ls", "answer_b": "cp"}
-    val correctAnswers: Map<String, Boolean>, // Correct answers like {"answer_a_correct": true, "answer_b_correct": false}
-    val points: Int =0,
+    val question_title: String = "",
+    val options: Map<String, String?> = mapOf(), // For answer_a, answer_b, etc.
+    val correctAnswers: Map<String, Boolean> = mapOf(), // For answer_a_correct, answer_b_correct, etc.
+    val points: Int = 0,
     val quizId: String = ""
 )
 
 data class QuizInfo(
+    val quizId: String = "",
     val name: String,
     val topic: String,
     val difficultyLevel: String, // Match this field with your DB

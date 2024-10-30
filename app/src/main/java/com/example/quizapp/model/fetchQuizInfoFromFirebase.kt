@@ -12,6 +12,7 @@ fun fetchQuizInfoFromFirebase(onDataFetched: (List<QuizInfo>) -> Unit) {
             val quizList = mutableListOf<QuizInfo>()
 
             for (quizSnapshot in snapshot.children) {
+                val quizId = quizSnapshot.key ?: ""
                 val name = quizSnapshot.child("name").getValue(String::class.java) ?: ""
                 val topic = quizSnapshot.child("topic").getValue(String::class.java) ?: ""
                 val difficultyLevel = quizSnapshot.child("difficultyLevel").getValue(String::class.java) ?: ""
@@ -19,7 +20,7 @@ fun fetchQuizInfoFromFirebase(onDataFetched: (List<QuizInfo>) -> Unit) {
                 val description = quizSnapshot.child("description").getValue(String::class.java) ?: ""
 
                 // Create a QuizInfo object and add it to the list
-                quizList.add(QuizInfo(name, topic, difficultyLevel, coverimage, description))
+                quizList.add(QuizInfo(quizId,name, topic, difficultyLevel, coverimage, description))
             }
             onDataFetched(quizList)  // Return the fetched quizzes
         }

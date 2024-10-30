@@ -29,7 +29,7 @@ fun addQuestionsToFirebase(
         if (questionKey != null) {
             // Create a QuizQuestion object from the JSON data
             val question = QuizQuestion(
-                questionTitle = questionObj.getString("questionTitle"),
+                question_title = questionObj.getString("question_title"),
                 options = mapOf(
                     "answer_a" to questionObj.getString("answer_a"),
                     "answer_b" to questionObj.getString("answer_b"),
