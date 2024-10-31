@@ -1,9 +1,11 @@
 package com.example.quizapp.pages
 
+import android.content.Context
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.sharp.Assessment
+import androidx.compose.material.icons.sharp.Leaderboard
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -46,13 +49,13 @@ import com.google.firebase.storage.FirebaseStorage
 fun SettingsPage(
     modifier: Modifier = Modifier,
     navController: NavController,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    context: Context
 ) {
     val userId = FirebaseAuth.getInstance().currentUser?.uid
     val userRef = userId?.let { FirebaseDatabase.getInstance().getReference("Students").child(it) }
     val storageRef = FirebaseStorage.getInstance().reference
     val authState = authViewModel.authState.observeAsState()
-    val context = LocalContext.current
     var name by remember { mutableStateOf("") }
     var profileImageUri by remember { mutableStateOf<Uri?>(null) }
     var profileImageUrl by remember { mutableStateOf("") }
@@ -60,15 +63,13 @@ fun SettingsPage(
     val pickImageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             profileImageUri = it
-
             val profileImagesRef = storageRef.child("profileImages/$userId.jpg")
 
             profileImagesRef.putFile(it)
                 .addOnSuccessListener {
-                    // Image uploaded successfully, now get the download URL
                     profileImagesRef.downloadUrl.addOnSuccessListener { downloadUrl ->
                         userRef?.child("profilePicUrl")?.setValue(downloadUrl.toString())
-                        profileImageUrl = downloadUrl.toString() // Update state with new image URL
+                        profileImageUrl = downloadUrl.toString()
                     }.addOnFailureListener { downloadError ->
                         Toast.makeText(context, "Failed to get download URL: ${downloadError.message}", Toast.LENGTH_SHORT).show()
                     }
@@ -80,6 +81,7 @@ fun SettingsPage(
             Toast.makeText(context, "No image selected", Toast.LENGTH_SHORT).show()
         }
     }
+
     LaunchedEffect(Unit) {
         userRef?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -100,32 +102,38 @@ fun SettingsPage(
         }
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF3F51B5)),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        item {
-            Spacer(modifier = Modifier.height(80.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(32.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Card(
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.bg_image),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+            ,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(80.dp))
+                Box(
                     modifier = Modifier
-                        .size(300.dp)
-                        .shadow(elevation = 6.dp, shape = RoundedCornerShape(16.dp)),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                        .fillMaxSize()
+                        .padding(32.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(24.dp)
+                    Card(
+                        modifier = Modifier
+                            .size(300.dp)
+                            .shadow(elevation = 6.dp, shape = RoundedCornerShape(16.dp)),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
                     ) {
-                        Box {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier.padding(24.dp)
+                        ) {
                             Box(
                                 modifier = Modifier
                                     .size(130.dp)
@@ -140,87 +148,66 @@ fun SettingsPage(
                                     contentScale = ContentScale.Crop,
                                 )
                             }
-                            Box(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .offset(y = (-4).dp)
-                                    .clip(CircleShape)
-                                    .background(
-                                        brush = Brush.verticalGradient(
-                                            colors = listOf(
-                                                Color(0xFFF953C6).copy(alpha = 0.8f),
-                                                Color(0xFFB91D73).copy(alpha = 0.8f)
-                                            )
-                                        )
-                                    )
-                                    .align(Alignment.BottomEnd)
-                                    .padding(8.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = "Edit Image",
-                                    tint = Color.White
-                                )
-                            }
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = name,
+                                textAlign = TextAlign.Center,
+                                fontSize = 26.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                            )
                         }
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = name, textAlign = TextAlign.Center,
-                            fontSize = 26.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                        )
                     }
                 }
             }
-        }
-        item {
-            Spacer(modifier = Modifier.height(24.dp))
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
 
-            Button(
-                onClick = { authViewModel.signout() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp, vertical = 10.dp)
-                    .height(55.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                shape = RoundedCornerShape(15)
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Logout,
-                    contentDescription = "Logout",
-                    modifier = Modifier.padding(end = 5.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Sign Out",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-            }
+                Button(
+                    onClick = { authViewModel.signout() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp, vertical = 10.dp)
+                        .height(55.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                    shape = RoundedCornerShape(15)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Logout,
+                        contentDescription = "Logout",
+                        modifier = Modifier.padding(end = 5.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Sign Out",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
 
-            Button(
-                onClick = { /* Navigate to leaderboard */ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp, vertical = 10.dp)
-                    .height(55.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                shape = RoundedCornerShape(15)
-            ) {
-                Icon(
-                    imageVector = Icons.Sharp.Assessment,
-                    contentDescription = "Leaderboard",
-                    modifier = Modifier.padding(end = 5.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "View Leaderboards",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
+                Button(
+                    onClick = { /* Navigate to leaderboard */ },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp, vertical = 10.dp)
+                        .height(55.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                    shape = RoundedCornerShape(15)
+                ) {
+                    Icon(
+                        imageVector = Icons.Sharp.Leaderboard,
+                        contentDescription = "Leaderboard",
+                        modifier = Modifier.padding(end = 5.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "View Leaderboards",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
             }
         }
     }

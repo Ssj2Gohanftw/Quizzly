@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quizapp.model.QuizInfo
-import com.example.quizapp.model.QuizQuestion
 import com.skydoves.landscapist.glide.GlideImage
 
 
@@ -30,7 +29,7 @@ import com.skydoves.landscapist.glide.GlideImage
 fun QuizCard(quiz: QuizInfo, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .padding(20.dp)
+            .padding(10.dp)
             .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = Color.DarkGray),
     ) {

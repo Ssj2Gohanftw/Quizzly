@@ -1,4 +1,5 @@
 package com.example.quizapp
+import android.content.Context
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -25,9 +26,8 @@ import com.example.quizapp.model.NavItem
 import com.example.quizapp.pages.SettingsPage
 import com.example.quizapp.pages.TrHomePage
 
-
 @Composable
-fun TrCurrentScreen(modifier: Modifier=Modifier, navController: NavController, authViewModel: AuthViewModel){
+fun TrCurrentScreen(modifier: Modifier=Modifier, navController: NavController, authViewModel: AuthViewModel,context: Context){
     val navItemList= listOf(
         NavItem("Home", Icons.Default.Home),
         NavItem("Create Quiz", Icons.Default.Add),
@@ -68,7 +68,8 @@ fun TrCurrentScreen(modifier: Modifier=Modifier, navController: NavController, a
             selectedIndex=selectedIndex,
             navController=navController,
             title = title,
-            authViewModel=authViewModel
+            authViewModel=authViewModel,
+            context = context
         )
 
     }
@@ -76,7 +77,7 @@ fun TrCurrentScreen(modifier: Modifier=Modifier, navController: NavController, a
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TrContentScreen(modifier: Modifier = Modifier, selectedIndex:Int,title:String,navController: NavController, authViewModel: AuthViewModel) {
+fun TrContentScreen(modifier: Modifier = Modifier, selectedIndex:Int,title:String,navController: NavController, authViewModel: AuthViewModel,context: Context) {
     when (selectedIndex) {
         0 -> {
             Scaffold(
@@ -86,7 +87,7 @@ fun TrContentScreen(modifier: Modifier = Modifier, selectedIndex:Int,title:Strin
                     )
                 },
                 content = { innerPadding ->
-                    TrHomePage(modifier = modifier.padding(innerPadding), navController, authViewModel)
+                    TrHomePage(modifier = modifier.padding(innerPadding), navController, authViewModel,context)
                 }
             )
         }
@@ -112,7 +113,7 @@ fun TrContentScreen(modifier: Modifier = Modifier, selectedIndex:Int,title:Strin
                 )
             },
             content = { innerPadding ->
-                SettingsPage(modifier = modifier.padding(innerPadding), navController, authViewModel)
+                SettingsPage(modifier = modifier.padding(innerPadding), navController, authViewModel, context )
             }
         )
         }

@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()){
                     innerPadding ->
-                    Navigation(modifier = Modifier.padding(innerPadding),authViewModel = authViewModel)
+                    Navigation(modifier = Modifier.padding(innerPadding),authViewModel = authViewModel,context = this)
                 }
             }
         }

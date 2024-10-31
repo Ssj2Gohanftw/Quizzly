@@ -1,4 +1,5 @@
 package com.example.quizapp.pages
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -45,7 +46,7 @@ import com.example.quizapp.model.fetchQuizInfoFromFirebase
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun TrHomePage(modifier: Modifier, navController: NavController, authViewModel: AuthViewModel) {
+fun TrHomePage(modifier: Modifier, navController: NavController, authViewModel: AuthViewModel,context: Context) {
     val authState = authViewModel.authState.observeAsState()
     LaunchedEffect(authState.value) {
         when (authState.value) {

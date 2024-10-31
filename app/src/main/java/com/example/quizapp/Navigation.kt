@@ -1,5 +1,6 @@
 package com.example.quizapp
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -9,7 +10,7 @@ import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.pages.*
 
 @Composable
-fun Navigation(modifier: Modifier, authViewModel: AuthViewModel) {
+fun Navigation(modifier: Modifier, authViewModel: AuthViewModel,context: Context) {
     val navController = rememberNavController()
 
     NavHost(
@@ -29,7 +30,7 @@ fun Navigation(modifier: Modifier, authViewModel: AuthViewModel) {
                 SignUpPage(modifier, navController, authViewModel)
             }
             composable("home") {
-                HomePage(modifier, navController, authViewModel)
+                HomePage(modifier, navController, authViewModel,context)
             }
 
             // Teacher login and home
@@ -40,25 +41,25 @@ fun Navigation(modifier: Modifier, authViewModel: AuthViewModel) {
                 TrSignUpPage(modifier, navController, authViewModel)
             }
             composable("trhome") {
-                TrHomePage(modifier, navController, authViewModel)
+                TrHomePage(modifier, navController, authViewModel,context)
             }
 
             composable("currentscreen") {
-                CurrentScreen(modifier, navController, authViewModel)
+                CurrentScreen(modifier, navController, authViewModel,context)
             }
             composable("trcurrentscreen") {
-                TrCurrentScreen(modifier, navController, authViewModel)
+                TrCurrentScreen(modifier, navController, authViewModel,context)
             }
 
             // Classes and settings pages
             composable("classes") {
-                ClassesPage(modifier, navController, authViewModel)
+                ClassesPage(modifier, navController, authViewModel,context)
             }
             composable("settings") {
-                SettingsPage(modifier, navController, authViewModel)
+                SettingsPage(modifier, navController, authViewModel,context)
             }
             composable("leaderboards") {
-                SettingsPage(modifier, navController, authViewModel)
+                SettingsPage(modifier, navController, authViewModel,context)
             }
             // Quiz screen with parameters for quiz details
             composable("quiz_screen/{quizId}") { backStackEntry ->
