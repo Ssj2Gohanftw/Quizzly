@@ -1,200 +1,149 @@
 package com.example.quizapp.pages
 
-//package com.example.quizapp.pages
-//
-//import android.net.Uri
-//import androidx.activity.compose.rememberLauncherForActivityResult
-//import androidx.activity.result.contract.ActivityResultContracts
-//import androidx.compose.foundation.Image
-//import androidx.compose.foundation.background
-//import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.lazy.LazyColumn
-//import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.filled.Edit
-//import androidx.compose.material.icons.filled.Person
-//import androidx.compose.material3.*
-//import androidx.compose.runtime.*
-//import androidx.compose.runtime.livedata.observeAsState
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.layout.ContentScale
-//import androidx.compose.ui.platform.LocalContext
-//import androidx.compose.ui.text.font.FontWeight
-//import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.unit.sp
-//import androidx.navigation.NavController
-//import coil.compose.rememberAsyncImagePainter
-//import com.example.quizapp.AuthState
-//import com.example.quizapp.AuthViewModel
-//
-//@Composable
-//fun SettingsPage(
-//    modifier: Modifier,
-//    navController: NavController,
-//    authViewModel: AuthViewModel
-//) {
-//    val authState = authViewModel.authState.observeAsState()
-//    val context = LocalContext.current
-//    val currentUser = authViewModel.getCurrentUser()
-//
-//    var profileImageUri by remember { mutableStateOf<Uri?>(null) }
-//    var isEditing by remember { mutableStateOf(false) }
-//
-//    val pickImageLauncher =
-//        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-//            profileImageUri = uri
-//        }
-//
-//    LaunchedEffect(authState.value) {
-//        when (authState.value) {
-//            is AuthState.UnAuthenticated -> navController.navigate("roleSelection")
-//            else -> Unit
-//        }
-//    }
-//
-//    // We Use LazyColumn for scrollable content
-//    LazyColumn(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(Color(0xFF3F51B5)),
-//        verticalArrangement = Arrangement.Top,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        item {
-//            Spacer(modifier = Modifier.height(100.dp))
-//
-//            // Card Background for Profile Picture and Username
-//            Card(
-//                modifier = Modifier
-//                    .padding(16.dp)
-//                    .fillMaxWidth(),
-//                colors = CardDefaults.cardColors(containerColor = Color.DarkGray),
-//                elevation = CardDefaults.cardElevation(8.dp)
-//            ) {
-//                Column(
-//                    modifier = Modifier.padding(16.dp),
-//                    horizontalAlignment = Alignment.CenterHorizontally
-//                ) {
-//                    Box(modifier = Modifier.size(150.dp)) {
-//                        profileImageUri?.let {
-//                            Image(
-//                                painter = rememberAsyncImagePainter(it),
-//                                contentDescription = "Profile Picture",
-//                                modifier = Modifier
-//                                    .size(150.dp)
-//                                    .align(Alignment.Center)
-//                                    .padding(8.dp),
-//                                contentScale = ContentScale.Crop
-//                            )
-//                        } ?: run {
-//                            Icon(
-//                                imageVector = Icons.Default.Person,
-//                                contentDescription = "Default Profile Icon",
-//                                modifier = Modifier
-//                                    .size(150.dp)
-//                                    .align(Alignment.Center)
-//                                    .padding(8.dp),
-//                                tint = Color.Gray
-//                            )
-//                        }
-//
-//                        IconButton(
-//                            onClick = { isEditing = !isEditing },
-//                            modifier = Modifier.align(Alignment.TopEnd)
-//                        ) {
-//                            Icon(
-//                                imageVector = Icons.Default.Edit,
-//                                contentDescription = "Edit Profile",
-//                                tint = Color.Black
-//                            )
-//                        }
-//                    }
-//
-//                    Spacer(modifier = Modifier.height(16.dp))
-//
-//                    // Username Display
-//                    Text(
-//                        text = currentUser?.displayName ?: "Username",
-//                        fontSize = 24.sp,
-//                        fontWeight = FontWeight.Bold,
-//                        color = Color.Black
-//                    )
-//                }
-//            }
-//
-//            Spacer(modifier = Modifier.height(16.dp))
-//
-//            // If edit mode is on, show edit options
-//            if (isEditing) {
-//                // Change Profile Picture Button
-//                Button(
-//                    onClick = { pickImageLauncher.launch("image/*") },
-//                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF)),
-//                    modifier = Modifier.padding(16.dp)
-//                ) {
-//                    Text(text = "Change Profile Picture", color = Color.White)
-//                }
-//
-//                Spacer(modifier = Modifier.height(16.dp))
-//
-//                // When an image is picked, upload it to Firebase Storage
-//                profileImageUri?.let {
-//                    LaunchedEffect(it) {
-//                        authViewModel.uploadProfilePicture(context, it)
-//                    }
-//                }
-//
-//                // Update Username Button
-//                Button(
-//                    onClick = { authViewModel.updateUsername("New Username") },
-//                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF)),
-//                    modifier = Modifier.padding(16.dp)
-//                ) {
-//                    Text(text = "Change Username", color = Color.White)
-//                }
-//
-//                Spacer(modifier = Modifier.height(16.dp))
-//
-//                // Update Password Button
-//                Button(
-//                    onClick = { authViewModel.updatePassword("new_password") },
-//                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF)),
-//                    modifier = Modifier.padding(16.dp)
-//                ) {
-//                    Text(text = "Change Password", color = Color.White)
-//                }
-//
-//                Spacer(modifier = Modifier.height(16.dp))
-//            }
-//        }
-//
-//        // Delete Account Button
-//        item {
-//            Spacer(modifier = Modifier.height(16.dp)) // Adjust the height as needed
-//            Button(
-//                onClick = { authViewModel.deleteAccount() },
-//                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-//                modifier = Modifier.padding(16.dp)
-//            ) {
-//                Text(text = "Delete Account", color = Color.White)
-//            }
-//
-//            Spacer(modifier = Modifier.height(16.dp)) // Adjust the height as needed
-//        }
-//
-//// Sign out Button
-//        item {
-//            Button(
-//                onClick = { authViewModel.signout() },
-//                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF)),
-//                modifier = Modifier.padding(16.dp)
-//            ) {
-//                Text(text = "Sign out", color = Color.White)
-//            }
-//
-//            Spacer(modifier = Modifier.height(16.dp)) // Adjust the height as needed
-//        }
-//    }
-//}
-//
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
+import com.example.quizapp.model.LeaderboardViewModel
+import com.example.quizapp.model.PlayerData
+
+@Composable
+fun LeaderboardScreen(
+    leaderboardViewModel: LeaderboardViewModel,
+    quizId: String,
+    userId: String
+) {
+    val playerDataList by leaderboardViewModel.leaderboardData.collectAsState()
+    val userRank by leaderboardViewModel.userRank.collectAsState()
+
+    LaunchedEffect(quizId) {
+        leaderboardViewModel.fetchLeaderboard(quizId, userId)
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        // Add Leaderboard Heading
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Leaderboard",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
+
+        items(playerDataList) { playerData ->
+            LeaderboardCard(playerData, isTopRank = playerData.rank == 1)
+        }
+    }
+}
+
+@Composable
+fun LeaderboardCard(playerData: PlayerData, isTopRank: Boolean) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .background(Color(0xFFF5F5F5)),
+        shape = RoundedCornerShape(10.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Profile Picture
+            Image(
+                painter = rememberAsyncImagePainter(playerData.profilePicUrl),
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Crown Icon for Top Rank
+                    if (isTopRank) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = "Top Rank",
+                            tint = Color(0xFFFFD700),
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                    }
+
+                    // Player Name
+                    Text(
+                        text = playerData.name,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                // Tabular format for Rank, Score
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Rank: ${playerData.rank}",
+                        fontSize = 14.sp,
+                        color = Color.Gray,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = "Score: ${playerData.score}",
+                        fontSize = 14.sp,
+                        color = Color.Gray,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.End
+                    )
+                }
+            }
+        }
+    }
+}

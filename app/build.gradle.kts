@@ -51,6 +51,7 @@ android {
 }
 
 dependencies{
+    implementation (libs.androidx.activity.ktx)
     implementation (libs.logging.interceptor)
     implementation (libs.firebase.database.ktx)
     implementation (libs.kotlinx.coroutines.core)
@@ -59,7 +60,6 @@ dependencies{
     implementation(libs.androidx.constraintlayout.compose)
     implementation (libs.material3)
     implementation (libs.androidx.material.icons.extended)
-
 
     implementation(libs.androidx.navigation.compose)
     implementation (libs.converter.gson)
@@ -77,6 +77,7 @@ dependencies{
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage.ktx)
+    implementation(libs.androidx.ui.test.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

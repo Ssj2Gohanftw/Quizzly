@@ -187,7 +187,7 @@ fun SettingsPage(
                 }
 
                 Button(
-                    onClick = { /* Navigate to leaderboard */ },
+                    onClick = { navController.navigate("leaderboards") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 32.dp, vertical = 10.dp)

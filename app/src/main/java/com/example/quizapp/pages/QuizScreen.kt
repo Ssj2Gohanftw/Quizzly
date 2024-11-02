@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,14 +48,23 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.quizapp.R
+import com.example.quizapp.model.AuthViewModel
+import com.example.quizapp.model.LeaderboardViewModel
 import com.example.quizapp.model.QuizViewModel
+import kotlinx.coroutines.launch
+
 @Composable
 fun QuizScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     quizId: String,
-    quizViewModel: QuizViewModel = viewModel()
+    quizViewModel: QuizViewModel = viewModel(),
+    leaderboardViewModel: LeaderboardViewModel = viewModel(),
+    authViewModel: AuthViewModel = viewModel()
 ) {
+    val scope = rememberCoroutineScope()
+    val currentUser = authViewModel.getCurrentUser()
+    val userId = currentUser?.uid ?: return
     val questions by quizViewModel.quizQuestions.observeAsState(emptyList())
     var isScoreUpdated by remember { mutableStateOf(false) }
     var currentIndex by remember { mutableStateOf(0) }
@@ -276,8 +286,15 @@ fun QuizScreen(
                     color = Color.White,
                     modifier = Modifier.padding(16.dp)
                 )
+                scope.launch {
+                    leaderboardViewModel.savePlayerScore(
+                        quizId = quizId,
+                        userId = userId,
+                        score = score,
+                    )
+                }
                 Button(
-                    onClick = { navController.navigate("leaderboard_screen") },
+                    onClick = { navController.navigate("leaderboards/$quizId") },
                     modifier = Modifier.padding(top = 24.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
                 ) {

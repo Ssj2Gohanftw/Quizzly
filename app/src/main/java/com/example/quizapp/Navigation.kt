@@ -1,18 +1,22 @@
 package com.example.quizapp
-
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.quizapp.model.AuthViewModel
+import com.example.quizapp.model.LeaderboardViewModel
+import com.example.quizapp.model.QuizViewModel
 import com.example.quizapp.pages.*
 
 @Composable
 fun Navigation(modifier: Modifier, authViewModel: AuthViewModel,context: Context) {
     val navController = rememberNavController()
-
+    val userId = authViewModel.getCurrentUser()?.uid
+   val leaderboardViewModel: LeaderboardViewModel = viewModel()
+    val quizViewModel: QuizViewModel = viewModel()
     NavHost(
         navController = navController,
         startDestination = "roleSelection",
@@ -58,8 +62,19 @@ fun Navigation(modifier: Modifier, authViewModel: AuthViewModel,context: Context
             composable("settings") {
                 SettingsPage(modifier, navController, authViewModel,context)
             }
-            composable("leaderboards") {
-                SettingsPage(modifier, navController, authViewModel,context)
+            composable("leaderboards"){
+                QuizzesLeaderboardsScreen(leaderboardViewModel = leaderboardViewModel,navController = navController)
+            }
+
+            composable("leaderboards/{quizId}") { backStackEntry ->
+                val quizId = backStackEntry.arguments?.getString("quizId") ?: return@composable
+                if (userId != null) {
+                    LeaderboardScreen(
+                        leaderboardViewModel = leaderboardViewModel,
+                        quizId = quizId,
+                        userId = userId
+                    )
+                }
             }
             // Quiz screen with parameters for quiz details
             composable("quiz_screen/{quizId}") { backStackEntry ->
@@ -68,7 +83,9 @@ fun Navigation(modifier: Modifier, authViewModel: AuthViewModel,context: Context
                 QuizScreen(
                     modifier = modifier,
                     navController = navController,
-                    quizId = quizId
+                    quizId = quizId,
+                    quizViewModel = quizViewModel,
+                    leaderboardViewModel = leaderboardViewModel
                 )
             }
         }

@@ -1,5 +1,6 @@
 [versions]
-agp = "8.7.1"
+activityKtx = "1.9.3"
+agp = "8.7.2"
 coilCompose = "2.2.2"
 converterGson = "2.9.0"
 firebaseBom = "33.5.1"
@@ -7,31 +8,40 @@ firebaseDatabase = "21.0.0"
 firebaseDatabaseKtxVersion = "21.0.0"
 firebaseDatabaseVersion = "21.0.0"
 googleServices = "4.4.2"
+hiltAndroid = "2.51.1"
+hiltAndroidCompiler = "2.51.1"
+hiltAndroidCompilerVersion = "2.38.1"
+hiltAndroidGradlePlugin = "2.51.1"
+hiltAndroidVersion = "2.38.1"
+hiltCompiler = "1.2.0"
 kotlin = "1.9.0"
-coreKtx = "1.13.1"
+coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinxCoroutinesCore = "1.7.3"
 landscapistGlide = "1.5.0"
-lifecycleRuntimeKtx = "2.8.6"
+lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.10.00"
+composeBom = "2024.10.01"
 googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
 loggingInterceptor = "4.9.1"
-material3 = "1.3.0"
+material3 = "1.3.1"
 material3Version = "<latest_version>"
-materialIconsExtended = "1.7.4"
+materialIconsExtended = "1.7.5"
 navigationCompose = "2.8.3"
-runtimeLivedata = "1.7.4"
+runtimeLivedata = "1.7.5"
 constraintlayoutCompose = "1.0.1"
 firebaseDatabaseKtx = "21.0.0"
 firebaseStorageKtx = "21.0.1"
 media3CommonKtx = "1.4.1"
+uiTestAndroid = "1.7.5"
 
 [libraries]
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-material3-vlatestversion = { module = "androidx.compose.material3:material3", version.ref = "material3Version" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -44,6 +54,11 @@ firebase-database-ktx-v2022 = { module = "com.google.firebase:firebase-database-
 google-firebase-database = { module = "com.google.firebase:firebase-database", version.ref = "firebaseDatabase" }
 google-firebase-database-ktx = { module = "com.google.firebase:firebase-database-ktx" }
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+hilt-android-compiler-v2381 = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompilerVersion" }
+hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroidGradlePlugin" }
+hilt-android-v2381 = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -67,6 +82,7 @@ material3 = { module = "androidx.compose.material3:material3", version.ref = "ma
 firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

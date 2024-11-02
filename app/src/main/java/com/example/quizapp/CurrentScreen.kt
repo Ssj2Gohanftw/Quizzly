@@ -4,6 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -25,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.pages.ClassesPage
@@ -34,6 +40,7 @@ import com.example.quizapp.pages.SettingsPage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CurrentScreen(
     modifier: Modifier = Modifier,
@@ -52,13 +59,10 @@ fun CurrentScreen(
 
     BackHandler {
         if (backPressedOnce) {
-            // Close the app if back is pressed twice
             (context as? Activity)?.finish()
         } else {
             backPressedOnce = true
-            Toast.makeText(context, "Swipe again to close the app", Toast.LENGTH_SHORT).show()
-
-            // Reset the back-pressed flag after 2 seconds
+            Toast.makeText(context, "Press back again to close the app", Toast.LENGTH_SHORT).show()
             coroutineScope.launch {
                 delay(2000)
                 backPressedOnce = false
@@ -74,12 +78,8 @@ fun CurrentScreen(
                     NavigationBarItem(
                         selected = selectedIndex == index,
                         onClick = { selectedIndex = index },
-                        icon = {
-                            Icon(imageVector = navItem.icon, contentDescription = "Icon")
-                        },
-                        label = {
-                            Text(text = navItem.label)
-                        }
+                        icon = { Icon(imageVector = navItem.icon, contentDescription = "Icon") },
+                        label = { Text(text = navItem.label) }
                     )
                 }
             }
@@ -91,14 +91,21 @@ fun CurrentScreen(
             2 -> "Settings"
             else -> ""
         }
-        ContentScreen(
-            modifier = Modifier.padding(innerPadding),
-            selectedIndex = selectedIndex,
-            navController = navController,
-            title = title,
-            authViewModel = authViewModel,
-            context = context
-        )
+
+        // Animated transition between screens
+        AnimatedContent(
+            targetState = selectedIndex,
+            transitionSpec = { fadeIn() with fadeOut() }, label = "" // Smooth fade transition
+        ) { targetIndex ->
+            ContentScreen(
+                modifier = Modifier.padding(innerPadding),
+                selectedIndex = targetIndex,
+                navController = navController,
+                title = title,
+                authViewModel = authViewModel,
+                context = context
+            )
+        }
     }
 }
 
@@ -120,7 +127,9 @@ fun ContentScreen(
                 }
             ) { innerPadding ->
                 HomePage(
-                    modifier = modifier.padding(innerPadding),
+                    modifier = modifier
+                        .padding(innerPadding)
+                        .padding(bottom = 56.dp), // Add extra padding for content above nav bar
                     navController = navController,
                     authViewModel = authViewModel,
                     context = context
@@ -134,10 +143,12 @@ fun ContentScreen(
                 }
             ) { innerPadding ->
                 ClassesPage(
-                    modifier = modifier.padding(innerPadding),
+                    modifier = modifier
+                        .padding(innerPadding)
+                        .padding(bottom = 56.dp),
                     navController = navController,
                     authViewModel = authViewModel,
-                    context=context
+                    context = context
                 )
             }
         }
@@ -148,7 +159,9 @@ fun ContentScreen(
                 }
             ) { innerPadding ->
                 SettingsPage(
-                    modifier = modifier.padding(innerPadding),
+                    modifier = modifier
+                        .padding(innerPadding)
+                        .padding(bottom = 56.dp),
                     navController = navController,
                     authViewModel = authViewModel,
                     context = context
