@@ -8,11 +8,10 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Assessment
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,9 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.quizapp.model.AuthViewModel
-import com.example.quizapp.pages.ClassesPage
-import com.example.quizapp.pages.HomePage
 import com.example.quizapp.model.NavItem
+import com.example.quizapp.pages.HomePage
 import com.example.quizapp.pages.SettingsPage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -50,7 +48,6 @@ fun CurrentScreen(
 ) {
     val navItemList = listOf(
         NavItem("Home", Icons.Default.Home),
-        NavItem("Classes", Icons.Default.Assessment),
         NavItem("Account", Icons.Default.Settings)
     )
     var selectedIndex by remember { mutableIntStateOf(0) }
@@ -87,15 +84,14 @@ fun CurrentScreen(
     ) { innerPadding ->
         val title = when (selectedIndex) {
             0 -> "Home"
-            1 -> "Classes"
-            2 -> "Account"
+            1 -> "Account"
             else -> ""
         }
 
         // Animated transition between screens
         AnimatedContent(
             targetState = selectedIndex,
-            transitionSpec = { fadeIn() with fadeOut() }, label = "" // Smooth fade transition
+            transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "" // Smooth fade transition
         ) { targetIndex ->
             ContentScreen(
                 modifier = Modifier.padding(innerPadding),
@@ -137,22 +133,6 @@ fun ContentScreen(
             }
         }
         1 -> {
-            Scaffold(
-                topBar = {
-                    TopAppBar(title = { Text(text = title) })
-                }
-            ) { innerPadding ->
-                ClassesPage(
-                    modifier = modifier
-                        .padding(innerPadding)
-                        .padding(bottom = 56.dp),
-                    navController = navController,
-                    authViewModel = authViewModel,
-                    context = context
-                )
-            }
-        }
-        2 -> {
             Scaffold(
                 topBar = {
                     TopAppBar(title = { Text(text = title) })

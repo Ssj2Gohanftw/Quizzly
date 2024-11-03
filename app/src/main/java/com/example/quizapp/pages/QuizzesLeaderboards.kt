@@ -35,17 +35,16 @@ fun QuizzesLeaderboardsScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         // Background Image
         Image(
-            painter = painterResource(id = R.drawable.bg_image), // Replace with your image
+            painter = painterResource(id = R.drawable.bg_image),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
 
         Column(modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.height(32.dp)) // Spacer at the top
+            Spacer(modifier = Modifier.height(32.dp))
 
             if (quizzes.isNotEmpty()) {
-                // TabRow for quiz names with colored backgrounds
                 ScrollableTabRow(
                     selectedTabIndex = selectedQuizIndex,
                     edgePadding = 16.dp,

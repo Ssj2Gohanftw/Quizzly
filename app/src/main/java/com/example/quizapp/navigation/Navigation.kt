@@ -19,7 +19,7 @@ fun Navigation(modifier: Modifier, authViewModel: AuthViewModel,context: Context
    val leaderboardViewModel: LeaderboardViewModel = viewModel()
     val quizViewModel: QuizViewModel = viewModel()
     val startDestination = if (FirebaseAuth.getInstance().currentUser != null){
-        "roleSelection"
+        "currentscreen"
     }
     else{
         "roleSelection"
@@ -52,9 +52,6 @@ fun Navigation(modifier: Modifier, authViewModel: AuthViewModel,context: Context
                 TrSignUpPage(modifier, navController, authViewModel)
             }
             composable("trhome") {
-                TrHomePage(modifier, navController, authViewModel,context)
-            }
-            composable("trcreatequiz") {
                 TrQuizCreatePage(modifier, navController, authViewModel, context)
             }
 
@@ -65,13 +62,12 @@ fun Navigation(modifier: Modifier, authViewModel: AuthViewModel,context: Context
                 TrCurrentScreen(modifier, navController, authViewModel,context)
             }
 
-            // Classes and settings pages
-            composable("classes") {
-                ClassesPage(modifier, navController, authViewModel,context)
-            }
+            // Settings pages
+
             composable("settings") {
                 SettingsPage(modifier, navController, authViewModel,context)
             }
+            //All quiz leaderboards screen
             composable("leaderboards"){
                 QuizzesLeaderboardsScreen(leaderboardViewModel = leaderboardViewModel,navController = navController)
             }

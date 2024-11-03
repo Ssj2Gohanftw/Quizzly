@@ -46,9 +46,10 @@ import androidx.navigation.NavController
 import com.example.quizapp.model.AuthState
 import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.R
-
+//Composable for Sign up page for Students
 @Composable
 fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: AuthViewModel){
+    //State Variables for the sign up page
     var email by remember {
         mutableStateOf("")
     }
@@ -61,9 +62,12 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
     var name by remember {
         mutableStateOf("")
     }
+    //Observing the authState of the viewModel
     val authState = authViewModel.authState.observeAsState()
-    val context=LocalContext.current
+    val context=LocalContext.current//Getting the context of the app
+    //LaunchedEffect to handle the authState of the viewModel
     LaunchedEffect(authState.value ) {
+        //if user is authenticated,he is taken to the home page
         when (authState.value) {
             is AuthState.Authenticated -> navController.navigate("currentscreen")
             is AuthState.Error -> Toast.makeText(
@@ -71,7 +75,6 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
                 (authState.value as AuthState.Error).message,
                 Toast.LENGTH_SHORT
             ).show()
-
             else -> {
                 Unit
             }
@@ -98,7 +101,6 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
             Text(text = "Name")
         })
         Spacer(modifier = Modifier.height(4.dp))
-
         OutlinedTextField(leadingIcon = {
             Icon(imageVector = Icons.Default.Email, contentDescription = "Email Account")
         },value =email , onValueChange ={
@@ -125,7 +127,7 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
             }
         })
         Spacer(modifier = Modifier.height(16.dp))
-
+        //On clicking this button,a new user account is created with the given details
         Button(onClick = {
             authViewModel.signup(name,email,password)
         },colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF))
@@ -166,6 +168,7 @@ fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: 
                     .clickable { })
         }
         Spacer(modifier = Modifier.height(16.dp))
+        //Button to navigate to the login page
         TextButton(onClick ={
             navController.navigate("login"){
                 popUpTo("signup"){

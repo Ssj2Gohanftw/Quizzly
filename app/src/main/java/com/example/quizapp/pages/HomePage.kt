@@ -1,7 +1,5 @@
 package com.example.quizapp.pages
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,7 +47,7 @@ import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.model.QuizInfo
 import com.example.quizapp.model.fetchQuizInfoFromFirebase
 
-
+//Composable for home page, which shows a list of quizzes
 @Composable
 fun HomePage(
     modifier: Modifier,
@@ -57,19 +55,21 @@ fun HomePage(
     authViewModel: AuthViewModel,
     context: Context
 ) {
-    val isConnected = remember { mutableStateOf(isNetworkAvailable(context)) }
-    val authState = authViewModel.authState.observeAsState()
+
+    val isConnected = remember { mutableStateOf(isNetworkAvailable(context)) }// Monitor network connectivity
+    val authState = authViewModel.authState.observeAsState()// Observe authentication state
     // Monitor connectivity changes
     LaunchedEffect(Unit) {
         isConnected.value = isNetworkAvailable(context)
     }
+    // Navigate to role selection page if the user is unauthenticated
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.UnAuthenticated -> navController.navigate("roleSelection")
             else -> Unit
         }
     }
-
+    // State variables for quizzes and search functionality
     var quizList by remember { mutableStateOf(listOf<QuizInfo>()) }
     var selectedQuiz by remember { mutableStateOf<QuizInfo?>(null) }
     var filteredQuizList by remember { mutableStateOf(listOf<QuizInfo>()) }
@@ -83,6 +83,7 @@ fun HomePage(
                 filteredQuizList = quizzes
             }
         }
+        // Filter quizzes based on search query
         LaunchedEffect(searchQuery) {
             filteredQuizList = quizList.filter { quiz ->
                 quiz.name.contains(searchQuery, ignoreCase = true) || quiz.topic.contains(searchQuery, ignoreCase = true)
@@ -97,7 +98,7 @@ fun HomePage(
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-
+    // Display quizzes based on connectivity
         if (isConnected.value) {
             Column(
                 modifier = Modifier

@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-
+//Composable for input fields for the create quiz page
 @Composable
 fun QuizInputField(label: String, value: String, onValueChange: (String) -> Unit) {
     OutlinedTextField(
@@ -27,7 +27,7 @@ fun QuizInputField(label: String, value: String, onValueChange: (String) -> Unit
 
     )
 }
-
+//Composable for input fields for the create quiz page
 @Composable
 fun OptionInputFields(
     optionA: String,
@@ -44,7 +44,7 @@ fun OptionInputFields(
     QuizInputField("Option C", optionC, onOptionCChange)
     QuizInputField("Option D", optionD, onOptionDChange)
 }
-
+//Composable for difficulty selection for the create quiz page with different colors for each difficulty
 @Composable
 fun DifficultySelection(selectedDifficulty: String, onDifficultyChange: (String) -> Unit) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {

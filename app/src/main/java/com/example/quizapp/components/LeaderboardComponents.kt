@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.quizapp.model.PlayerData
-
+//Composable for leaderboard cards used in leaderboard screen and the all leaderboards screen
 @Composable
 fun LeaderboardCard(playerData: PlayerData, isTopRank: Boolean) {
     Card(
@@ -54,7 +54,7 @@ fun LeaderboardCard(playerData: PlayerData, isTopRank: Boolean) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Crown Icon for Top Rank
+                    // Star Icon for Top Rank
                     if (isTopRank) {
                         Icon(
                             imageVector = Icons.Default.Star,
