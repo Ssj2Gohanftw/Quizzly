@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.quizapp.R
+import com.example.quizapp.components.uploadImageToFirebase
 import com.example.quizapp.model.AuthState
 import com.example.quizapp.model.AuthViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -77,20 +78,16 @@ fun SettingsPage(
     val pickImageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             profileImageUri = it
-            val profileImagesRef = storageRef.child("profileImages/$userId.jpg")
-
-            profileImagesRef.putFile(it)
-                .addOnSuccessListener {
-                    profileImagesRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                        userRef?.child("profilePicUrl")?.setValue(downloadUrl.toString())
-                        profileImageUrl = downloadUrl.toString()
-                    }.addOnFailureListener { downloadError ->
-                        Toast.makeText(context, "Failed to get download URL: ${downloadError.message}", Toast.LENGTH_SHORT).show()
-                    }
+            userRef?.let { ref ->
+                uploadImageToFirebase(
+                    imageUri = it,
+                    storageRef = storageRef,
+                    databaseRef = ref,
+                    context = context
+                ) { imageUrl ->
+                    profileImageUrl = imageUrl
                 }
-                .addOnFailureListener { uploadError ->
-                    Toast.makeText(context, "Failed to upload image: ${uploadError.message}", Toast.LENGTH_SHORT).show()
-                }
+            }
         } ?: run {
             Toast.makeText(context, "No image selected", Toast.LENGTH_SHORT).show()
         }

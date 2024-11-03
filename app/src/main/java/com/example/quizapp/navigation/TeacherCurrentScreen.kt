@@ -100,7 +100,7 @@ fun TrContentScreen(modifier: Modifier = Modifier, selectedIndex:Int,title:Strin
                     )
                 },
                 content = { innerPadding ->
-                    TrQuizCreatePage(modifier = modifier.padding(innerPadding), navController, authViewModel )
+                    TrQuizCreatePage(modifier = modifier.padding(innerPadding), navController, authViewModel ,context)
 
                 }
             )

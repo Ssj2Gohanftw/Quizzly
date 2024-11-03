@@ -43,17 +43,13 @@ import androidx.navigation.NavController
 import com.example.quizapp.R
 import com.example.quizapp.components.QuizCard
 import com.example.quizapp.components.QuizDetailDialog
+import com.example.quizapp.components.isNetworkAvailable
 import com.example.quizapp.model.AuthState
 import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.model.QuizInfo
 import com.example.quizapp.model.fetchQuizInfoFromFirebase
 
-fun isNetworkAvailable(context: Context): Boolean {
-    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    val network = connectivityManager.activeNetwork ?: return false
-    val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
-    return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-}
+
 @Composable
 fun HomePage(
     modifier: Modifier,

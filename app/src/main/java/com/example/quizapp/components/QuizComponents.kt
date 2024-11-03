@@ -71,3 +71,49 @@ fun QuizDetailDialog(quiz: QuizInfo,navController: NavController, onDismiss: () 
         }
     )
 }
+@Composable
+fun TrQuizCard(quiz: QuizInfo, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .padding(10.dp)
+            .clickable { onClick() },
+        colors = CardDefaults.cardColors(containerColor = Color.DarkGray),
+    ) {
+        Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            GlideImage(imageModel = quiz.coverimage, modifier = Modifier.size(100.dp), contentDescription = quiz.name)
+            Text(text = quiz.name, fontSize = 20.sp, fontWeight = FontWeight.Bold,)
+            Text(text = "Topic: ${quiz.topic}", fontSize = 16.sp, textAlign = TextAlign.Center,)
+            Text(text = "Difficulty: ${quiz.difficultyLevel}", fontSize = 16.sp, textAlign = TextAlign.Center,)
+        }
+    }
+}
+
+@Composable
+fun TrQuizDetailDialog(quiz: QuizInfo, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = { TextButton(onClick = onDismiss) { Text(text = "Close") } },
+        text = {
+            Column {
+                GlideImage(imageModel = quiz.coverimage, modifier = Modifier.size(100.dp).align(Alignment.CenterHorizontally), contentDescription = quiz.name)
+                Text(text = quiz.name, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = "Topic: ${quiz.topic}", fontSize = 18.sp)
+                Text(text = "Difficulty: ${quiz.difficultyLevel}", fontSize = 18.sp)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = quiz.description, fontSize = 16.sp, color = Color.Gray)
+                // Add button to play the quiz
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(modifier = Modifier.align(Alignment.CenterHorizontally), colors = ButtonDefaults.buttonColors(containerColor = Color(
+                    0xFF4CAF50
+                )
+                ), onClick ={} )
+                {
+                    Text("View Leaderboard",color=Color.White)
+                }
+
+            }
+        }
+    )
+}
