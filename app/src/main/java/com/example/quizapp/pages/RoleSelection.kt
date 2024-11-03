@@ -1,5 +1,4 @@
 package com.example.quizapp.pages
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

@@ -1,4 +1,4 @@
-package com.example.quizapp
+package com.example.quizapp.navigation
 
 import android.app.Activity
 import android.content.Context
@@ -88,7 +88,7 @@ fun CurrentScreen(
         val title = when (selectedIndex) {
             0 -> "Home"
             1 -> "Classes"
-            2 -> "Settings"
+            2 -> "Account"
             else -> ""
         }
 

@@ -1,4 +1,4 @@
-package com.example.quizapp
+package com.example.quizapp.navigation
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

@@ -80,7 +80,7 @@ fun TrLoginPage(modifier: Modifier, navController: NavController, authViewModel:
         horizontalAlignment = Alignment.CenterHorizontally
     )
     {
-        Image(painter = painterResource(id = R.drawable.loginicon), contentDescription = "Login Image", modifier = Modifier.size(200.dp))
+        Image(painter = painterResource(id = R.drawable.profile), contentDescription = "Login Image", modifier = Modifier.size(200.dp))
 
         Text(text = "Welcome Back", fontSize = 28.sp, fontWeight = FontWeight.Bold)
 

@@ -1,5 +1,5 @@
-// QuizScreen.kt
 package com.example.quizapp.pages
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.Image
@@ -17,11 +17,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.sharp.Bolt
 import androidx.compose.material.icons.sharp.Clear
-import androidx.compose.material.icons.sharp.Leaderboard
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -75,11 +74,36 @@ fun QuizScreen(
     var showFeedback by remember { mutableStateOf(false) }
     val animatedScore by animateIntAsState(targetValue = score, label = "")
     val currentQuestion = questions.getOrNull(currentIndex)
-
+    var showQuitDialog by remember { mutableStateOf(false) }
     LaunchedEffect(quizId) {
         quizViewModel.getQuizQuestions(quizId)
     }
 
+    BackHandler {
+        showQuitDialog = true
+    }
+    if (showQuitDialog) {
+        AlertDialog(
+            onDismissRequest = { showQuitDialog = false },
+            title = { Text("Quit Quiz?") },
+            text = { Text("Are you sure you want to quit?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showQuitDialog = false
+                        navController.navigate("currentscreen")
+                    }
+                ) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showQuitDialog = false }) {
+                    Text("No")
+                }
+            }
+        )
+    }
     Box(modifier = modifier.fillMaxSize()) {
         // Background Image
         Image(
@@ -95,12 +119,14 @@ fun QuizScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "${currentIndex+1}/${questions.size}",
-                fontSize = 24.sp,
-                color = Color.White,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+            if (currentIndex < questions.size) {
+                Text(
+                    text = "${currentIndex + 1}/${questions.size}",
+                    fontSize = 24.sp,
+                    color = Color.White,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
 
             currentQuestion?.let { question ->
                 // Question Card
@@ -299,6 +325,13 @@ fun QuizScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
                 ) {
                     Text("View Leaderboard", color = Color.White)
+                }
+                Button(
+                    onClick = { navController.navigate("currentscreen") },
+                    modifier = Modifier.padding(top = 24.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                ) {
+                    Text("Home", color = Color.White)
                 }
             }
         }

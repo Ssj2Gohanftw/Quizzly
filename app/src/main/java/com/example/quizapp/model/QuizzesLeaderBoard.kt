@@ -11,7 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.quizapp.pages.LeaderboardCard
+import com.example.quizapp.components.LeaderboardCard
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable

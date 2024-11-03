@@ -61,7 +61,7 @@ fun QuizzesLeaderboardsScreen(
                             },
                             text = {
                                 Text(
-                                    text = quiz.name,
+                                    text = "${quiz.name}, ${quiz.topic}",
                                     color = if (selectedQuizIndex == index) Color.White else Color.Gray,
                                     modifier = Modifier
                                         .padding(8.dp)

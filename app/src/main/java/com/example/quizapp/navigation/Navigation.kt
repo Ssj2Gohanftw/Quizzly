@@ -1,4 +1,4 @@
-package com.example.quizapp
+package com.example.quizapp.navigation
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,6 +10,7 @@ import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.model.LeaderboardViewModel
 import com.example.quizapp.model.QuizViewModel
 import com.example.quizapp.pages.*
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun Navigation(modifier: Modifier, authViewModel: AuthViewModel,context: Context) {
@@ -17,9 +18,15 @@ fun Navigation(modifier: Modifier, authViewModel: AuthViewModel,context: Context
     val userId = authViewModel.getCurrentUser()?.uid
    val leaderboardViewModel: LeaderboardViewModel = viewModel()
     val quizViewModel: QuizViewModel = viewModel()
+    val startDestination = if (FirebaseAuth.getInstance().currentUser != null){
+        "currentScreen"
+    }
+    else{
+        "roleSelection"
+    }
     NavHost(
         navController = navController,
-        startDestination = "roleSelection",
+        startDestination = startDestination,
         builder = {
             // Role selection page
             composable("roleSelection") {

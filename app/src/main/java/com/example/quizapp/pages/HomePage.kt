@@ -1,6 +1,8 @@
 package com.example.quizapp.pages
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,11 +11,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -26,29 +32,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quizapp.R
-import com.example.quizapp.model.AuthState
-import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.components.QuizCard
 import com.example.quizapp.components.QuizDetailDialog
+import com.example.quizapp.model.AuthState
+import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.model.QuizInfo
 import com.example.quizapp.model.fetchQuizInfoFromFirebase
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 
 fun isNetworkAvailable(context: Context): Boolean {
     val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -64,10 +62,16 @@ fun HomePage(
     context: Context
 ) {
     val isConnected = remember { mutableStateOf(isNetworkAvailable(context)) }
-
+    val authState = authViewModel.authState.observeAsState()
     // Monitor connectivity changes
     LaunchedEffect(Unit) {
         isConnected.value = isNetworkAvailable(context)
+    }
+    LaunchedEffect(authState.value) {
+        when (authState.value) {
+            is AuthState.UnAuthenticated -> navController.navigate("roleSelection")
+            else -> Unit
+        }
     }
 
     var quizList by remember { mutableStateOf(listOf<QuizInfo>()) }

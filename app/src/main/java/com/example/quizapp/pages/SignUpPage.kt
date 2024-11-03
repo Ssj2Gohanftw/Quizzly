@@ -47,7 +47,6 @@ import com.example.quizapp.model.AuthState
 import com.example.quizapp.model.AuthViewModel
 import com.example.quizapp.R
 
-
 @Composable
 fun SignUpPage(modifier: Modifier, navController: NavController, authViewModel: AuthViewModel){
     var email by remember {
