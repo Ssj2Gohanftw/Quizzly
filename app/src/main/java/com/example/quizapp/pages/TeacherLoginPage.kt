@@ -46,6 +46,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.VisualTransformation
 import com.example.quizapp.model.AuthState
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+
 @Composable
 fun TrLoginPage(modifier: Modifier, navController: NavController, authViewModel: AuthViewModel){
     var email by remember {
@@ -54,26 +59,47 @@ fun TrLoginPage(modifier: Modifier, navController: NavController, authViewModel:
     var password by remember {
         mutableStateOf("")
     }
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
     var passwordVisible by remember {
+        mutableStateOf(false)
+    }
+    var resetEmailSent by remember {
         mutableStateOf(false)
     }
     val authState = authViewModel.authState.observeAsState()
     val context= LocalContext.current
-    LaunchedEffect(authState.value ) {
+    val databaseRef= FirebaseDatabase.getInstance().getReference("Teachers")
+    LaunchedEffect(authState.value) {
         when (authState.value) {
-            is AuthState.Authenticated -> navController.navigate("trcurrentscreen")
-            is AuthState.Error -> Toast.makeText(
-                context,
-                (authState.value as AuthState.Error).message,
-                Toast.LENGTH_SHORT
-            ).show()
+            is AuthState.Authenticated -> {
+                val userEmail = FirebaseAuth.getInstance().currentUser?.email
+                if (userEmail != null) {
+                    databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            for (childSnapshot in snapshot.children) {
+                                val teacherEmail = childSnapshot.child("email").getValue(String::class.java)
+                                if (teacherEmail == userEmail) {
+                                    Toast.makeText(context, "Logged in as $teacherEmail", Toast.LENGTH_SHORT).show()
+                                    break
+                                }
+                            }
+                        }
 
-            else -> {
-                Unit
+                        override fun onCancelled(error: DatabaseError) {
+                            Toast.makeText(context, "Failed to fetch user email.", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                }
+                navController.navigate("currentscreen")
             }
+            is AuthState.Error -> {
+                Toast.makeText(context, (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
+            }
+            else -> Unit
         }
     }
-
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -124,9 +150,12 @@ fun TrLoginPage(modifier: Modifier, navController: NavController, authViewModel:
 
         Text(text = "Forgot Password?", modifier = Modifier.clickable {
             if (email.isNotEmpty()) {
+                isLoading = true
                 FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                     .addOnCompleteListener { task ->
+                        isLoading = false
                         if (task.isSuccessful) {
+                            resetEmailSent = true
                             Toast.makeText(context, "Password reset email sent", Toast.LENGTH_SHORT).show()
                         } else {
                             Toast.makeText(context, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
@@ -136,6 +165,11 @@ fun TrLoginPage(modifier: Modifier, navController: NavController, authViewModel:
                 Toast.makeText(context, "Please enter your email", Toast.LENGTH_SHORT).show()
             }
         })
+        if (isLoading) {
+            Toast.makeText(context,  "Sending email...", Toast.LENGTH_SHORT).show()
+        } else if (resetEmailSent) {
+            Toast.makeText(context,  "Check your email for password reset instructions.", Toast.LENGTH_SHORT).show()
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
 

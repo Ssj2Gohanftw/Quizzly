@@ -33,7 +33,6 @@ fun QuizzesLeaderboardsScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Background Image
         Image(
             painter = painterResource(id = R.drawable.bg_image),
             contentDescription = null,
@@ -67,8 +66,8 @@ fun QuizzesLeaderboardsScreen(
                                         .background(
                                             Brush.horizontalGradient(
                                                 colors = listOf(
-                                                    Color(0xFF6200EA),
-                                                    Color(0xFF03DAC5)
+                                                    Color(0xFF2196F3),
+                                                    Color(0xFFE91E63)
                                                 )
                                             ),
                                             shape = MaterialTheme.shapes.small

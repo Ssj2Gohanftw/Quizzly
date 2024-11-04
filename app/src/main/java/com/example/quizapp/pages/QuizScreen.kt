@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,7 +42,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -71,6 +71,7 @@ fun QuizScreen(
     var selectedOptionKey by remember { mutableStateOf<String?>(null) }
     var isAnswered by remember { mutableStateOf(false) }
     var hasUsedPowerUp by remember { mutableStateOf(false) }
+    var powerUpUsedinQuiz by remember { mutableStateOf(false) }
     var showFeedback by remember { mutableStateOf(false) }
     val animatedScore by animateIntAsState(targetValue = score, label = "")
     val currentQuestion = questions.getOrNull(currentIndex)
@@ -151,8 +152,10 @@ fun QuizScreen(
                 // Determine options based on power-up usage
                 val optionsToDisplay = if (hasUsedPowerUp) {
                     // Filter options to display one correct and one incorrect option
-                    val correctOptions = question.options.filterKeys { question.correctAnswers[it] == true }
-                    val incorrectOptions = question.options.filterKeys { question.correctAnswers[it] == false }
+                    val correctOptions =
+                        question.options.filterKeys { question.correctAnswers[it] == true }
+                    val incorrectOptions =
+                        question.options.filterKeys { question.correctAnswers[it] == false }
 
                     // Get only one correct and one incorrect option
                     if (correctOptions.isNotEmpty() && incorrectOptions.isNotEmpty()) {
@@ -182,7 +185,8 @@ fun QuizScreen(
                             .padding(8.dp)
                             .background(optionColor, RoundedCornerShape(20.dp))
                             .clickable(enabled = !isAnswered) {
-                                selectedOptionKey = if (selectedOptionKey == optionKey) null else optionKey
+                                selectedOptionKey =
+                                    if (selectedOptionKey == optionKey) null else optionKey
                             },
                         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                     ) {
@@ -205,14 +209,14 @@ fun QuizScreen(
                         if (selectedOptionKey != null) {
                             if (question.correctAnswers[selectedOptionKey] == true) {
                                 score += question.points
-                                isScoreUpdated=true
+                                isScoreUpdated = true
+                            } else {
+//                                isScoreUpdated=false
                             }
-                            else{
-                                isScoreUpdated=false
-                            }
-                            showFeedback=true
+                            showFeedback = true
                             isAnswered = true
-                    }},
+                        }
+                    },
                     enabled = !isAnswered && selectedOptionKey != null,
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
@@ -230,7 +234,7 @@ fun QuizScreen(
                         isAnswered = false
                         hasUsedPowerUp = false
                         showFeedback = false
-                        isScoreUpdated=false
+                        isScoreUpdated = false
                     },
                     enabled = isAnswered,
                     modifier = Modifier.fillMaxWidth(),
@@ -243,8 +247,11 @@ fun QuizScreen(
 
                 // 50-50 Power-Up Button
                 Button(
-                    onClick = { hasUsedPowerUp = true },
-                    enabled = !hasUsedPowerUp,
+                    onClick = {
+                        hasUsedPowerUp = true
+                        powerUpUsedinQuiz = true
+                    },
+                    enabled = !powerUpUsedinQuiz,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 32.dp, vertical = 10.dp)
@@ -269,7 +276,7 @@ fun QuizScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(20.dp),
+                            .padding(18.dp),
                         contentAlignment = Alignment.Center // Center the feedback card within the screen
                     ) {
                         Card(
@@ -279,7 +286,7 @@ fun QuizScreen(
                             shape = RoundedCornerShape(20.dp),
                             modifier = Modifier
                                 .fillMaxWidth(0.8f) // Set a width to make it look centered horizontally
-                                .padding(10.dp)
+                                .padding(8.dp)
                         ) {
                             Column(
                                 modifier = Modifier.padding(16.dp),
@@ -291,27 +298,14 @@ fun QuizScreen(
                                     contentDescription = "Feedback Icon",
                                     tint = Color.White,
                                     modifier = Modifier.size(48.dp)
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = if (isScoreUpdated) "+${question.points} Correct Answer!" else "Incorrect Answer!",
-                                    fontSize = 24.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center
+                                        .align(Alignment.CenterHorizontally)
                                 )
                             }
                         }
                     }
                 }
-            }?: run {
-                // Quiz Completion Message
-                Text(
-                    text = "Quiz Complete! Your final score: $animatedScore",
-                    fontSize = 24.sp,
-                    color = Color.White,
-                    modifier = Modifier.padding(16.dp)
-                )
+            } ?: run {
+                // Results after user is done with the quiz
                 scope.launch {
                     leaderboardViewModel.savePlayerScore(
                         quizId = quizId,
@@ -319,21 +313,42 @@ fun QuizScreen(
                         score = score,
                     )
                 }
-                Button(
-                    onClick = { navController.navigate("leaderboards/$quizId") },
-                    modifier = Modifier.padding(top = 24.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+//                Spacer(modifier = Modifier.height(100.dp))
+                Box(modifier.height(400.dp), contentAlignment = Alignment.Center){
+                Card(
+                    modifier = Modifier.fillMaxWidth()
+                        , shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(Color.DarkGray)
                 ) {
-                    Text("View Leaderboard", color = Color.White)
-                }
-                Button(
-                    onClick = { navController.navigate("currentscreen") },
-                    modifier = Modifier.padding(top = 24.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
-                ) {
-                    Text("Home", color = Color.White)
+                    Column() {
+                        Text(
+                            text = "Quiz Complete! Your final score: $animatedScore",
+                            fontSize = 24.sp,
+                            color = Color.White,
+                            modifier = Modifier.padding(16.dp),
+                            fontWeight = FontWeight.Bold,
+
+                        )
+                    }
+                    Row(modifier = Modifier.padding(16.dp)) {
+                        Button(
+                            onClick = { navController.navigate("leaderboards/$quizId") },
+                            modifier = Modifier.padding(top = 24.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                        ) {
+                            Text("View Leaderboard", color = Color.White)
+                        }
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Button(
+                            onClick = { navController.navigate("currentscreen") },
+                            modifier = Modifier.padding(top = 24.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                        ) {
+                            Text("Home", color = Color.White)
+                        }
+                    }
                 }
             }
         }
     }
+}
 }
