@@ -45,6 +45,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.VisualTransformation
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.quizapp.model.AuthState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -70,6 +73,7 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
    var passwordVisible by remember {
       mutableStateOf(false)
    }
+   val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.login))
    val authState = authViewModel.authState.observeAsState()
    val context= LocalContext.current
    val databaseRef=FirebaseDatabase.getInstance().getReference("Students")
@@ -110,7 +114,8 @@ fun LoginPage(modifier: Modifier, navController: NavController, authViewModel: A
       horizontalAlignment = Alignment.CenterHorizontally
    )
    {
-      Image(painter = painterResource(id = R.drawable.profile), contentDescription = "Login Image", modifier = Modifier.size(200.dp))
+      LottieAnimation(composition = composition, iterations = 1,modifier = Modifier.size(200.dp))
+//      Image(painter = painterResource(id = R.drawable.profile), contentDescription = "Login Image", modifier = Modifier.size(200.dp))
 
       Text(text = "Welcome Back", fontSize = 28.sp, fontWeight = FontWeight.Bold)
 
