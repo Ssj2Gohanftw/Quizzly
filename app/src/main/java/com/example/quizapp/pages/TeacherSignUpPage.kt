@@ -43,9 +43,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.quizapp.R
+import com.example.quizapp.components.RegistrationProfileAnimation
 import com.example.quizapp.model.AuthState
 import com.example.quizapp.model.AuthViewModel
-import com.example.quizapp.R
 
 @Composable
 fun TrSignUpPage(modifier: Modifier, navController: NavController, authViewModel: AuthViewModel){
@@ -83,7 +84,8 @@ fun TrSignUpPage(modifier: Modifier, navController: NavController, authViewModel
         horizontalAlignment = Alignment.CenterHorizontally
     )
     {
-        Image(painter = painterResource(id = R.drawable.profile), contentDescription = "Login Image", modifier = Modifier.size(200.dp))
+        RegistrationProfileAnimation()
+//        Image(painter = painterResource(id = R.drawable.profile), contentDescription = "Login Image", modifier = Modifier.size(200.dp))
 
         Text(text = "Welcome!", fontSize = 28.sp, fontWeight = FontWeight.Bold)
 

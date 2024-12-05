@@ -52,6 +52,7 @@ android {
 
 dependencies{
     implementation ("com.airbnb.android:lottie-compose:6.0.0")
+
     implementation (libs.androidx.activity.ktx)
     implementation (libs.logging.interceptor)
     implementation (libs.firebase.database.ktx)

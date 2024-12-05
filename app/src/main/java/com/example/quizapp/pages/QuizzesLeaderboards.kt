@@ -11,12 +11,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quizapp.R
 import com.example.quizapp.model.LeaderboardViewModel
 import com.example.quizapp.model.QuizLeaderboard
-
+// leaderboard composable for all the quizzes
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuizzesLeaderboardsScreen(
     navController: NavController,
@@ -40,8 +43,12 @@ fun QuizzesLeaderboardsScreen(
             modifier = Modifier.fillMaxSize()
         )
 
-        Column(modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.height(32.dp))
+        Column(){
+            TopAppBar(
+                title={
+                    Text(text="Leaderboards", fontSize = 20.sp, fontWeight = FontWeight.Bold,color=Color.White)
+                }
+            , colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.Black), modifier = Modifier.fillMaxWidth())
 
             if (quizzes.isNotEmpty()) {
                 ScrollableTabRow(

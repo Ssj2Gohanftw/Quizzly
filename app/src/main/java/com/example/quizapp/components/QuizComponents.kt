@@ -1,10 +1,14 @@
 package com.example.quizapp.components
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,7 +33,7 @@ import com.skydoves.landscapist.glide.GlideImage
 fun QuizCard(quiz: QuizInfo, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .padding(10.dp)
+            .padding(5.dp)
             .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = Color.DarkGray),
     ) {
@@ -58,9 +62,10 @@ fun QuizDetailDialog(quiz: QuizInfo,navController: NavController, onDismiss: () 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = quiz.description, fontSize = 16.sp, color = Color.Gray)
                 Spacer(modifier = Modifier.height(16.dp))
-
+                Row(modifier = Modifier.padding(5.dp).height(IntrinsicSize.Min),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically) {
                 Button(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
                     onClick = {
                         navController.navigate("quiz_screen/${quiz.quizId}")
@@ -68,6 +73,15 @@ fun QuizDetailDialog(quiz: QuizInfo,navController: NavController, onDismiss: () 
                 ) {
                     Text("Play Quiz", color = Color.White)
                 }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Button(
+                        onClick = { navController.navigate("leaderboards/${quiz.quizId}") },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                    ) {
+                        Text("View Leaderboard", color = Color.White)
+                    }
+                    }
+
             }
         }
     )
